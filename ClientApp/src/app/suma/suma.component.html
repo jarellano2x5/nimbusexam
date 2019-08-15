@@ -1,0 +1,42 @@
+<h3>Ejercicio Uno</h3>
+
+<div>
+    <div class="form-group">
+        <label>Suma buscada</label>
+        <input type="number" class="form-control" [(ngModel)]="suma" />
+    </div>
+    <div class="form-group">
+        <label>Subconjuntos</label>
+        <input type="number" class="form-control" [(ngModel)]="subcon" />
+    </div>
+    <div class="form-group">
+        <label>Numero a agregar</label>
+        <input type="number" class="form-control" [(ngModel)]="num" />
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md">
+            <button type="button" (click)="agrega()" class="btn btn-small btn-success"> + </button>
+            <ul class="list-group">
+                <li *ngFor="let i of lista; let idx = index" class="list-group-item">
+                    {{ i }}
+                    <button type="button" (click)="elimina(idx)" class="btn btn-small btn-danger"> - </button>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md">
+            <button type="button" (click)="generar()" class="btn btn-small btn-success">
+                Generar
+            </button>
+            <button type="button" (click)="default()" class="btn btn-small btn-warning">
+                Poner ejercicio
+            </button>
+            <ul class="list-group">
+                <li *ngFor="let rw of sumCon" class="list-group-item">
+                    <span *ngFor="let i of rw">{{ i }} / </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
