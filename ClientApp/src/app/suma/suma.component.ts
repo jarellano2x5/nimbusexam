@@ -2,13 +2,14 @@ import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
+    selector: 'suma-comp',
     templateUrl: './suma.component.html'
 })
 export class SumaComponent {
     lista: number[] = [];
     subcon: number = 2;
     suma: number = 14;
-    sumCon: Array<Array<number>>;
+    sumCon: Array<Array<number>> = Object.create(null);
     num: number = 0;
 
     constructor(private http: HttpClient, @Inject('BASE_URL') private burl: string) {
@@ -26,7 +27,7 @@ export class SumaComponent {
             this.http.post<any>(this.burl + 'api/Suma/' + this.subcon + '/' + this.suma, this.lista).subscribe(response => {
                 console.log(JSON.stringify(response));
                 this.sumCon = response;
-            }, error => console.error(error));
+            });
         }
     }
 

@@ -2,11 +2,12 @@ import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
+    selector: 'emisor-component',
     templateUrl: './emisor.component.html'
 })
 export class EmisorComponent {
     show: boolean = true;
-    emi: emisor;
+    emi: emisor = { id: 0, rfc: '', fechaInicioOperacion: '', capital: 0, activo: 0};
     emis: emisor[] = [];
 
     constructor(private http: HttpClient, @Inject('BASE_URL') private burl: string) {
@@ -16,7 +17,7 @@ export class EmisorComponent {
     lista() {
         this.http.get<emisor[]>(this.burl + 'api/Emisor').subscribe(response => {
             this.emis = response;
-        }, error => console.error(error));
+        });
     }
 
     nuevo() {
@@ -42,7 +43,7 @@ export class EmisorComponent {
                 this.http.put<emisor>(this.burl + 'api/Emisor/' + this.emi.id, this.emi).subscribe(response => {
                     this.emi = response;
                     alert('Emisor actualizado de forma correcta.');
-                }, error => console.error(error));
+                });
             }
         }
     }
@@ -50,7 +51,7 @@ export class EmisorComponent {
     eli(id: number) {
         this.http.delete(this.burl + 'api/Emisor/' + id).subscribe(response => {
             this.lista();
-        }, error => console.error(error));
+        });
     }
 
     regresa() {
