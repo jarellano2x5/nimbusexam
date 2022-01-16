@@ -1,11 +1,11 @@
 # nimbusexam
 examen para nimbus
 
-el proyecto ha sido generado utilizando asp.net core 2.2, angular version 6 con typescript
+el proyecto ha sido generado utilizando asp.net core 3.1, angular version 13 con typescript
 
-1. Instalar AspNetCore 2.2. Para windows es necesario descargar e instalar asp.net core 2.2 desde
+1. Instalar AspNetCore 3.1. Para windows es necesario descargar e instalar asp.net core 3.1 desde
 https://dotnet.microsoft.com/download
-y elegir la versión que es compatible con vs 2017 o vs 2019
+y elegir la versión que es compatible con vs 2019
 
 2. Instalar la ultima versión de npm, que se instala con node.js
 https://nodejs.org/es/
@@ -23,6 +23,6 @@ con la base de datos, se modifico el modelo de esta aplicación para que se cone
 
 El ejercicio tres, no se realizo (windows Forms).
 
-El ejercicio cuatro. Se utilizó el api generado en el ejercicio uno y se conecto con una web app de angular 6
+El ejercicio cuatro. Se utilizó el api generado en el ejercicio uno y se conecto con una web app de angular 13
 con typescript.
 
