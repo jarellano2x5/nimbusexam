@@ -1,0 +1,6 @@
+@exanim.web_HostAddress = http://localhost:5031
+
+GET {{exanim.web_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
