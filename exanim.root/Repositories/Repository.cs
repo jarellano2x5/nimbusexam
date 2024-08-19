@@ -32,9 +32,9 @@ public class Repository<T> : IRepository<T> where T : Entity
         await _ctx.SaveChangesAsync();
     }
 
-    public Task<IEnumerable<T>> SearchAsync(Expression<Func<T, bool>> query, bool tracking = false, bool addIncludes = false)
+    public async Task<IEnumerable<T>> SearchAsync(Expression<Func<T, bool>> query, bool tracking = false, bool addIncludes = false)
     {
-        throw new NotImplementedException();
+        return await Mount(tracking, addIncludes).Where(query).ToListAsync();
     }
 
     public async Task UpdateAsync(T model)

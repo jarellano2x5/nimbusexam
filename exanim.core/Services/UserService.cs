@@ -32,6 +32,20 @@ public class UserService : IUserService
         }
     }
 
+    public async Task<IEnumerable<UserDTO>> AllAsync()
+    {
+        try
+        {
+            return _mapper.Map<IEnumerable<UserDTO>>(
+                await _repo.SearchAsync(o => 1 == 1)
+            );
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
     public Task<UserDTO> AttachAsync(Guid id, UserDTO dto)
     {
         throw new NotImplementedException();
