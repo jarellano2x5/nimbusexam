@@ -1,4 +1,11 @@
-# nimbusexam
+# nuevo proposito
+repositorio que muestra el uso de arquitectura limpia, patrón repositorio y el manejo de errores.
+
+* Proyecto generado en net 8 apirest controllers
+* Base de datos en MSSQL, por utilidad
+* Tres proyectos para completar el producto en el servidor
+
+# nimbusexam - original
 examen para nimbus
 
 el proyecto ha sido generado utilizando asp.net core 3.1, angular version 13 con typescript
