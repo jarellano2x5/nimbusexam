@@ -8,7 +8,7 @@ public static class DependInjector
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ICFUsuarioService, CFUsuarioService>();
         services.AddAutoMapper(typeof(MapperProfile));
 
         return services;

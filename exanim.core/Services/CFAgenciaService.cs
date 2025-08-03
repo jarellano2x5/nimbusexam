@@ -5,21 +5,21 @@ using exanim.core.Interfaces;
 
 namespace exanim.core.Services;
 
-public class AgencyService : IAgencyService
+public class CFAgenciaService : ICFAgenciaService
 {
-    private readonly IRepository<Agency> _repo;
+    private readonly IRepository<CFAgencia> _repo;
 
-    public AgencyService(IRepository<Agency> repository)
+    public CFAgenciaService(IRepository<CFAgencia> repository)
     {
         _repo = repository;
     }
     
-    public Task<AgencyDTO> AddAsync(AgencyDTO dto)
+    public Task<CFAgenciaDTO> AddAsync(CFAgenciaDTO dto)
     {
         throw new NotImplementedException();
     }
 
-    public Task<AgencyDTO> AttachAsync(Guid id, AgencyDTO dto)
+    public Task<CFAgenciaDTO> AttachAsync(Guid id, CFAgenciaDTO dto)
     {
         throw new NotImplementedException();
     }
@@ -34,7 +34,7 @@ public class AgencyService : IAgencyService
         throw new NotImplementedException();
     }
 
-    public Task<AgencyDTO> PickAsync(Guid id)
+    public Task<CFAgenciaDTO> PickAsync(Guid id)
     {
         throw new NotImplementedException();
     }

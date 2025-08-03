@@ -5,25 +5,25 @@ using exanim.core.Interfaces;
 
 namespace exanim.core.Services;
 
-public class UserService : IUserService
+public class CFUsuarioService : ICFUsuarioService
 {
-    private readonly IRepository<User> _repo;
+    private readonly IRepository<CFUsuario> _repo;
     private readonly IMapper _mapper;
 
-    public UserService(IRepository<User> repository, IMapper mapper)
+    public CFUsuarioService(IRepository<CFUsuario> repository, IMapper mapper)
     {
         _repo = repository;
         _mapper = mapper;
     }
     
-    public async Task<UserDTO> AddAsync(UserDTO dto)
+    public async Task<CFUsuarioDTO> AddAsync(CFUsuarioDTO dto)
     {
         try
         {
-            User model = _mapper.Map<User>(dto);
-            model.UserId = Guid.NewGuid();
+            CFUsuario model = _mapper.Map<CFUsuario>(dto);
+            model.UsuarioId = Guid.NewGuid();
             await _repo.InsertAsync(model);
-            dto.UserId = model.UserId;
+            dto.UsuarioId = model.UsuarioId;
             return dto;
         }
         catch (Exception)
@@ -32,11 +32,11 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<IEnumerable<UserDTO>> AllAsync()
+    public async Task<IEnumerable<CFUsuarioDTO>> AllAsync()
     {
         try
         {
-            return _mapper.Map<IEnumerable<UserDTO>>(
+            return _mapper.Map<IEnumerable<CFUsuarioDTO>>(
                 await _repo.SearchAsync(o => 1 == 1)
             );
         }
@@ -46,7 +46,7 @@ public class UserService : IUserService
         }
     }
 
-    public Task<UserDTO> AttachAsync(Guid id, UserDTO dto)
+    public Task<CFUsuarioDTO> AttachAsync(Guid id, CFUsuarioDTO dto)
     {
         throw new NotImplementedException();
     }
@@ -56,7 +56,7 @@ public class UserService : IUserService
         throw new NotImplementedException();
     }
 
-    public Task<UserDTO> PickAsync(Guid id)
+    public Task<CFUsuarioDTO> PickAsync(Guid id)
     {
         throw new NotImplementedException();
     }

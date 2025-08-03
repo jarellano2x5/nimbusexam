@@ -8,7 +8,7 @@ public class MapperProfile : Profile
 {
     public MapperProfile()
     {
-        CreateMap<UserDTO, User>();
-        CreateMap<User, UserDTO>();
+        CreateMap<CFUsuarioDTO, CFUsuario>();
+        CreateMap<CFUsuario, CFUsuarioDTO>();
     }
 }
