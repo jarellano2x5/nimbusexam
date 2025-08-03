@@ -1,6 +1,6 @@
 namespace exanim.core.Entities;
 
-public class VELinea
+public class VELinea : Entity
 {
     public Guid LineaId { get; set; }
     public string Clave { get; set; } = string.Empty;

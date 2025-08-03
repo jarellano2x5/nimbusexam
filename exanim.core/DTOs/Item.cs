@@ -1,5 +1,3 @@
-using System;
-
 namespace exanim.core.DTOs;
 
 public class Item

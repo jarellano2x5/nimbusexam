@@ -1,6 +1,6 @@
 namespace exanim.core.Entities;
 
-public class OPPieza
+public class OPPieza : Entity
 {
     public Guid PiezaId { get; set; }
     public string Nombre { get; set; } = string.Empty;

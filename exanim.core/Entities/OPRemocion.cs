@@ -1,6 +1,6 @@
 namespace exanim.core.Entities;
 
-public class OPRemocion
+public class OPRemocion : Entity
 {
     public Guid RemocionId { get; set; }
     public string Marca { get; set; } = string.Empty;

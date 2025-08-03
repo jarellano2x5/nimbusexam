@@ -3,7 +3,7 @@ using exanim.core.Enums;
 
 namespace exanim.core.Entities;
 
-public class CFPerfil
+public class CFPerfil : Entity
 {
     public Guid PerfilId { get; set; }
     public string Nombre { get; set; } = string.Empty;

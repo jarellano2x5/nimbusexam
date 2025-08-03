@@ -2,7 +2,7 @@ using exanim.core.Enums;
 
 namespace exanim.core.Entities;
 
-public class CFParametro
+public class CFParametro : Entity
 {
     public Guid ParametroId { get; set; }
     public string Clave { get; set; } = string.Empty;

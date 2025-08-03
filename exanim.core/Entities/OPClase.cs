@@ -1,6 +1,6 @@
 namespace exanim.core.Entities;
 
-public class OPClase
+public class OPClase : Entity
 {
     public Guid ClaseId { get; set; }
     public string Nombre { get; set; } = string.Empty;

@@ -1,6 +1,6 @@
 namespace exanim.core.Entities;
 
-public class VECotizacion
+public class VECotizacion : Entity
 {
     public Guid CotizacionId { get; set; }
     public DateTime Fecha { get; set; }

@@ -1,6 +1,6 @@
 namespace exanim.core.Entities;
 
-public class CFOperador
+public class CFOperador : Entity
 {
     public Guid OperadorId { get; set; }
     public DateTime Fecha { get; set; }

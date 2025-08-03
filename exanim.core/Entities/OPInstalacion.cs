@@ -1,6 +1,6 @@
 namespace exanim.core.Entities;
 
-public class OPInstalacion
+public class OPInstalacion : Entity
 {
     public Guid InstalacionId { get; set; }
     public string Marca { get; set; } = string.Empty;

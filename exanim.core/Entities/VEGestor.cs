@@ -1,6 +1,6 @@
 namespace exanim.core.Entities;
 
-public class VEGestor
+public class VEGestor : Entity
 {
     public Guid GestorId { get; set; }
     public bool Activo { get; set; }

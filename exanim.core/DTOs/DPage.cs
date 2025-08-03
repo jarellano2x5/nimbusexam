@@ -1,5 +1,3 @@
-using System;
-
 namespace exanim.core.DTOs;
 
 public class DPage<T> where T : class
