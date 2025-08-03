@@ -7,9 +7,9 @@ namespace exanim.web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CFPerfilesController(ICFPerfilService service) : ControllerBase
+public class AgenciasController(ICFAgenciaService service) : ControllerBase
 {
-    private readonly ICFPerfilService _logic = service;
+    private readonly ICFAgenciaService _logic = service;
 
     [HttpGet]
     public async Task<IEnumerable<Item>> Get()
@@ -18,13 +18,13 @@ public class CFPerfilesController(ICFPerfilService service) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<CFPerfilDTO>> Get(Guid id)
+    public async Task<ActionResult<CFAgenciaDTO>> Get(Guid id)
     {
         return await _logic.PickAsync(id);
     }
 
     [HttpPost]
-    public async Task<ActionResult<CFPerfilDTO>> Post([FromBody] CFPerfilDTO dto)
+    public async Task<ActionResult<CFAgenciaDTO>> Post([FromBody] CFAgenciaDTO dto)
     {
         if (!ModelState.IsValid)
         {
@@ -34,12 +34,18 @@ public class CFPerfilesController(ICFPerfilService service) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<CFPerfilDTO>> Put(Guid id, [FromBody] CFPerfilDTO dto)
+    public async Task<ActionResult<CFAgenciaDTO>> Put(Guid id, [FromBody] CFAgenciaDTO dto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
         return await _logic.AttachAsync(id, dto);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<bool>> Delete(Guid id)
+    {
+        return await _logic.DownAsync(id);
     }
 }

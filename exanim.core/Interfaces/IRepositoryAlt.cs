@@ -1,0 +1,13 @@
+using System.Linq.Expressions;
+
+namespace exanim.core.Interfaces;
+
+public interface IRepositoryAlt<T>
+{
+    Task InsertAsync(T model);
+    Task DeleteAsync(T model);
+    Task<T?> GetAsync(Guid id, Guid idp);
+    Task<T?> GetAsync(Expression<Func<T, bool>> query);
+    Task UpdateAsync(T model);
+    Task<IEnumerable<T>> SearchAsync(Expression<Func<T, bool>> query, bool tracking = false, bool addIncludes = false);
+}

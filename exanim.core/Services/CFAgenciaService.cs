@@ -1,40 +1,92 @@
 using exanim.core.DTOs;
 using exanim.core.Entities;
 using exanim.core.Interfaces;
+using Mapster;
+using MapsterMapper;
 
 namespace exanim.core.Services;
 
-public class CFAgenciaService : ICFAgenciaService
+public class CFAgenciaService(IRepository<CFAgencia> repository, IMapper mapper) : ICFAgenciaService
 {
-    private readonly IRepository<CFAgencia> _repo;
-
-    public CFAgenciaService(IRepository<CFAgencia> repository)
-    {
-        _repo = repository;
-    }
+    private readonly IRepository<CFAgencia> _repo = repository;
+    private readonly IMapper _map = mapper;
     
-    public Task<CFAgenciaDTO> AddAsync(CFAgenciaDTO dto)
+    public async Task<CFAgenciaDTO> AddAsync(CFAgenciaDTO dto)
     {
-        throw new NotImplementedException();
+        try
+        {
+            CFAgencia? ck = await _repo.GetAsync(a => a.RFC == dto.RFC);
+            if (ck != null) throw new Exception("Record already exists");
+            CFAgencia mod = _map.Map<CFAgencia>(dto);
+            mod.AgenciaId = Guid.NewGuid();
+            await _repo.InsertAsync(mod);
+            return dto with { AgenciaId = mod.AgenciaId };
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
-    public Task<CFAgenciaDTO> AttachAsync(Guid id, CFAgenciaDTO dto)
+    public async Task<CFAgenciaDTO> AttachAsync(Guid id, CFAgenciaDTO dto)
     {
-        throw new NotImplementedException();
+        try
+        {
+            CFAgencia? ck = await _repo.GetAsync(a => a.RFC == dto.RFC && a.AgenciaId == id);
+            if (ck != null) throw new Exception("Record already exists");
+            CFAgencia? mod = await _repo.GetAsync(id);
+            if (mod is null) throw new Exception("Record not found");
+            mod.Adapt(dto);
+            await _repo.UpdateAsync(mod);
+            return dto;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
-    public Task<bool> DownAsync(Guid id)
+    public async Task<bool> DownAsync(Guid id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            CFAgencia? mod = await _repo.GetAsync(id);
+            if (mod is null) throw new Exception("Record not found");
+            if (!mod.Activo) return false;
+            mod.Activo = false;
+            await _repo.UpdateAsync(mod);
+            return true;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
-    public Task<IEnumerable<Item>> ItemsAsync(string srch)
+    public async Task<IEnumerable<Item>> ItemsAsync(string srch)
     {
-        throw new NotImplementedException();
+        try
+        {
+            IEnumerable<CFAgencia> ls = await _repo.SearchAsync(a => 1 == 1);
+            return _map.Map<IEnumerable<Item>>(ls);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
-    public Task<CFAgenciaDTO> PickAsync(Guid id)
+    public async Task<CFAgenciaDTO> PickAsync(Guid id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            CFAgencia? mod = await _repo.GetAsync(id);
+            if (mod is null) throw new Exception("Record not found");
+            return _map.Map<CFAgenciaDTO>(mod);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 }

@@ -12,6 +12,7 @@ public static class DependInjector
     public static IServiceCollection AddRoot(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped(typeof(IRepositoryAlt<>), typeof(RepositoryAlt<>));
         services.AddDbContext<AppCtx>(opt =>
         {
             opt.UseSqlServer(configuration.GetConnectionString("dbnim"));

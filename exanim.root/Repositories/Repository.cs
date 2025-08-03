@@ -26,6 +26,11 @@ public class Repository<T> : IRepository<T> where T : Entity
         return await _ctx.Set<T>().FindAsync(id);
     }
 
+    public async Task<T?> GetAsync(Expression<Func<T, bool>> query)
+    {
+        return await Mount(false, false).Where(query).FirstOrDefaultAsync();
+    }
+
     public async Task InsertAsync(T model)
     {
         _ctx.Set<T>().Add(model);

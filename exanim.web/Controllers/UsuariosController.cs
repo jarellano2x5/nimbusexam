@@ -7,14 +7,9 @@ namespace exanim.web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CFUsuariosController : ControllerBase
+public class UsuariosController(ICFUsuarioService service) : ControllerBase
 {
-    private readonly ICFUsuarioService _logic;
-
-    public CFUsuariosController(ICFUsuarioService service)
-    {
-        _logic = service;
-    }
+    private readonly ICFUsuarioService _logic = service;
 
     [HttpGet]
     public async Task<IEnumerable<CFUsuarioDTO>> Get()

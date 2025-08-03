@@ -9,6 +9,7 @@ public class CFAgencia : Entity
     public string RazonSocial { get; set; } = string.Empty;
     public string Nombre { get; set; } = string.Empty;
     public CFTipoEnum Tipo { get; set; }
+    // todo: arreglar nombre de propiedad Plan
     public CFPlanEnum PlanEnum { get; set; }
     public string ZipCode { get; set; } = string.Empty;
     public bool Activo { get; set; }

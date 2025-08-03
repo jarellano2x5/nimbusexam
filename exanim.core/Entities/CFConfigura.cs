@@ -1,6 +1,6 @@
 namespace exanim.core.Entities;
 
-public class CFConfigura : Entity
+public class CFConfigura : EntityAlt
 {
     public Guid AgenciaId { get; set; }
     public Guid ParametroId { get; set; }
