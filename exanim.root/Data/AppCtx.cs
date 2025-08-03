@@ -8,7 +8,7 @@ public class AppCtx : DbContext
 {
     public AppCtx(DbContextOptions<AppCtx> options) : base(options)
     {
-        base.Database.EnsureCreated();
+        base.Database.EnsureDeleted();
     }
 
     public DbSet<Agency> Agencies { get; set; }
