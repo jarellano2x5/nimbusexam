@@ -1,7 +1,7 @@
-using AutoMapper;
 using exanim.core.DTOs;
 using exanim.core.Entities;
 using exanim.core.Interfaces;
+using MapsterMapper;
 
 namespace exanim.core.Services;
 
