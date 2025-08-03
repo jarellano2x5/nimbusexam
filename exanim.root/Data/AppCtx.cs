@@ -7,7 +7,7 @@ public class AppCtx : DbContext
 {
     public AppCtx(DbContextOptions<AppCtx> options) : base(options)
     {
-        base.Database.EnsureDeleted();
+        //base.Database.EnsureDeleted();
     }
 
     public DbSet<Brand> Brands { get; set; }
