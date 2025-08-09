@@ -25,6 +25,13 @@ public static class MapperProfile
             .Map(d => d.Name, s => s.Cadena)
             .Map(d => d.Code, s => s.Valor.ToString());
         TypeAdapterConfig<CFSignedDTO, CFUsuario>.NewConfig();
+        TypeAdapterConfig<CFTaller, Item>.NewConfig()
+            .Map(d => d.Id, s => s.TallerId)
+            .Map(d => d.Name, s => s.Nombre)
+            .Map(d => d.Code, s => s.Codigo);
+        TypeAdapterConfig<CFTallerDTO, CFTaller>.NewConfig()
+            .Map(d => d.AgenciaId, s => s.Agencia.Id)
+            .Map(d => d.UsuarioId, s => s.Usuario.Id);
         TypeAdapterConfig<CFUsuarioDTO, CFUsuario>.NewConfig();
         TypeAdapterConfig<CFUsuario, CFUsuarioDTO>.NewConfig();
         TypeAdapterConfig<CFParametro, CFParametroDTO>.NewConfig()

@@ -32,7 +32,7 @@ public class CFAgenciaService(IRepository<CFAgencia> repository, IMapper mapper)
     {
         try
         {
-            CFAgencia? ck = await _repo.GetAsync(a => a.RFC == dto.RFC && a.AgenciaId == id);
+            CFAgencia? ck = await _repo.GetAsync(a => a.RFC == dto.RFC && a.AgenciaId != id);
             if (ck != null) throw new Exception("Record already exists");
             CFAgencia? mod = await _repo.GetAsync(id);
             if (mod is null) throw new Exception("Record not found");
