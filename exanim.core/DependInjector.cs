@@ -9,6 +9,7 @@ public static class DependInjector
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddScoped<IBrandService, BrandService>();
         services.AddScoped<ICFAfiliadoService, CFAfiliadoService>();
         services.AddScoped<ICFAgenciaService, CFAgenciaService>();
         services.AddScoped<ICFConfiguraService, CFConfiguraService>();
@@ -17,6 +18,8 @@ public static class DependInjector
         services.AddScoped<ICFTallerService, CFTallerService>();
         services.AddScoped<ICFUsuarioService, CFUsuarioService>();
         services.AddScoped<IUtilService, UtilService>();
+        services.AddScoped<IVEGestorService, VEGestorService>();
+        services.AddScoped<IVEUnidadService, VEUnidadService>();
         services.AddMapster();
         MapperProfile.Configure();
 

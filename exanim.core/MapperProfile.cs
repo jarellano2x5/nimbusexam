@@ -1,7 +1,6 @@
 using Mapster;
 using exanim.core.DTOs;
 using exanim.core.Entities;
-using exanim.core.Enums;
 
 namespace exanim.core;
 
@@ -9,17 +8,19 @@ public static class MapperProfile
 {
     public static void Configure()
     {
+        TypeAdapterConfig<Brand, Item>.NewConfig()
+            .Map(d => d.Id, s => s.BrandId);
         TypeAdapterConfig<CFAfiliadoDTO, CFUsuario>.NewConfig();
         TypeAdapterConfig<CFAgencia, CFAgenciaDTO>.NewConfig()
             .Map(d => d.Tipo, s => new Option { Id = (byte)s.Tipo, Name = s.Tipo.ToString() })
-            .Map(d => d.Plan, s => new Option { Id = (byte)s.PlanEnum, Name = s.PlanEnum.ToString() });
+            .Map(d => d.Plan, s => new Option { Id = (byte)s.Plan, Name = s.Plan.ToString() });
         TypeAdapterConfig<CFAgencia, Item>.NewConfig()
             .Map(d => d.Id, s => s.AgenciaId)
             .Map(d => d.Name, s => s.Nombre)
             .Map(d => d.Code, s => s.RFC);
         TypeAdapterConfig<CFAgenciaDTO, CFAgencia>.NewConfig()
             .Map(d => d.Tipo, s => s.Tipo.Id)
-            .Map(d => d.PlanEnum, s => s.Plan.Id);
+            .Map(d => d.Plan, s => s.Plan.Id);
         TypeAdapterConfig<CFConfigura, Item>.NewConfig()
             .Map(d => d.Id, s => s.ParametroId)
             .Map(d => d.Name, s => s.Cadena)
@@ -49,5 +50,15 @@ public static class MapperProfile
             .Map(d => d.Name, s => s.Nombre);
         TypeAdapterConfig<CFPerfilDTO, CFPerfil>.NewConfig()
             .Map(d => d.Grupo, s => s.Grupo.Id);
+        TypeAdapterConfig<VEGestor, Item>.NewConfig()
+            .Map(d => d.Id, s => s.GestorId);
+        TypeAdapterConfig<VEGestorDTO, VEGestor>.NewConfig()
+            .Map(d => d.CompaniaId, s => s.Compania.Id);
+        TypeAdapterConfig<VEUnidad, Item>.NewConfig()
+            .Map(d => d.Id, s => s.UnidadId)
+            .Map(d => d.Code, s => s.Placa)
+            .Map(d => d.Name, s => $"{s.Modelo} / {s.Anio}");
+        TypeAdapterConfig<VEUnidadDTO, VEUnidad>.NewConfig()
+            .Map(d => d.MarcaId, s => s.Marca.Id);
     }
 }
