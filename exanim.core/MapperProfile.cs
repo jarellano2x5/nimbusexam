@@ -50,6 +50,11 @@ public static class MapperProfile
             .Map(d => d.Name, s => s.Nombre);
         TypeAdapterConfig<CFPerfilDTO, CFPerfil>.NewConfig()
             .Map(d => d.Grupo, s => s.Grupo.Id);
+        TypeAdapterConfig<OPClaseDTO, OPClase>.NewConfig()
+            .Map(d => d.AgenciaId, s => s.Agencia.Id);
+        TypeAdapterConfig<OPClase, Item>.NewConfig()
+            .Map(d => d.Id, s => s.ClaseId)
+            .Map(d => d.Name, s => s.Nombre);
         TypeAdapterConfig<VEGestor, Item>.NewConfig()
             .Map(d => d.Id, s => s.GestorId);
         TypeAdapterConfig<VEGestorDTO, VEGestor>.NewConfig()
