@@ -352,26 +352,6 @@ public class AppCtx : DbContext
             entity.Property(e => e.Fecha).HasColumnType("datetime");
         });
 
-        modelBuilder.Entity<VECompania>(entity =>
-        {
-            entity.HasKey(e => e.Id)
-                .HasName("PK_VECompania");
-            entity.ToTable("VECompania");
-
-            entity.Property(e => e.RFC).HasMaxLength(13)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.RazonSocial).HasMaxLength(150)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Nombre).HasMaxLength(50)
-                .IsUnicode(false).IsRequired();
-
-            entity.HasMany<VECliente>()
-                .WithOne()
-                .HasForeignKey(e => e.CompaniaId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired(false);
-        });
-
         modelBuilder.Entity<VECotizacion>(entity =>
         {
             entity.HasKey(e => e.Id)
@@ -390,19 +370,6 @@ public class AppCtx : DbContext
                 .IsRequired();
         });
 
-        modelBuilder.Entity<VECliente>(entity =>
-        {
-            entity.HasKey(e => e.Id)
-                .HasName("PK_VECliente");
-            entity.ToTable("VECliente");
-
-            entity.HasMany<OPOrden>()
-                .WithOne()
-                .HasForeignKey(e => e.GestorId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-        });
-
         modelBuilder.Entity<VELinea>(entity =>
         {
             entity.HasKey(e => e.Id)
@@ -415,28 +382,6 @@ public class AppCtx : DbContext
                 .IsUnicode(false).IsRequired();
             entity.Property(e => e.Concepto).HasMaxLength(500)
                 .IsUnicode(false).IsRequired();
-        });
-
-        modelBuilder.Entity<VEUnidad>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK_VEUnidad");
-            entity.ToTable("VEUnidad");
-
-            entity.Property(e => e.Placa).HasMaxLength(15)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Modelo).HasMaxLength(30)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Anio).HasMaxLength(4)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Color).HasMaxLength(15)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Registrado).HasColumnType("datetime");
-
-            entity.HasMany<OPOrden>()
-                .WithOne()
-                .HasForeignKey(e => e.UnidadId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
         });
         
         base.OnModelCreating(modelBuilder);

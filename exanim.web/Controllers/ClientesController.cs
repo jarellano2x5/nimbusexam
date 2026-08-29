@@ -7,9 +7,9 @@ namespace exanim.web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class GestoresController(IVEGestorService service) : ControllerBase
+public class ClientesController(IVEClienteService service) : ControllerBase
 {
-    private readonly IVEGestorService _logic = service;
+    private readonly IVEClienteService _logic = service;
 
     [HttpGet]
     public async Task<IEnumerable<Item>> Get()
@@ -18,13 +18,13 @@ public class GestoresController(IVEGestorService service) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<VEGestorDTO>> Get(Guid id)
+    public async Task<ActionResult<VEClienteDTO>> Get(Guid id)
     {
         return await _logic.PickAsync(id);
     }
 
     [HttpPost]
-    public async Task<ActionResult<VEGestorDTO>> Post([FromBody] VEGestorDTO dto)
+    public async Task<ActionResult<VEClienteDTO>> Post([FromBody] VEClienteDTO dto)
     {
         if (!ModelState.IsValid)
         {
@@ -34,7 +34,7 @@ public class GestoresController(IVEGestorService service) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<VEGestorDTO>> Put(Guid id, [FromBody] VEGestorDTO dto)
+    public async Task<ActionResult<VEClienteDTO>> Put(Guid id, [FromBody] VEClienteDTO dto)
     {
         if (!ModelState.IsValid)
         {

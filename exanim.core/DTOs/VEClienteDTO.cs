@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace exanim.core.DTOs;
 
-public record VEGestorDTO
+public record VEClienteDTO
 {
-    public Guid GestorId { get; set; }
+    public Guid Id { get; set; }
     [Required]
     public bool Activo { get; set; }
     [Required]

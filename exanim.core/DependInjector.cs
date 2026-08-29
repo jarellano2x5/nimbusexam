@@ -17,7 +17,7 @@ public static class DependInjector
         services.AddScoped<ICFTallerService, CFTallerService>();
         services.AddScoped<ICFUsuarioService, CFUsuarioService>();
         services.AddScoped<IUtilService, UtilService>();
-        services.AddScoped<IVEGestorService, VEGestorService>();
+        services.AddScoped<IVEClienteService, VEClienteService>();
         services.AddScoped<IVEUnidadService, VEUnidadService>();
         services.AddMapster();
         MapperProfile.Configure();

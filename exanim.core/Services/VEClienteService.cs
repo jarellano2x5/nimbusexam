@@ -6,19 +6,19 @@ using MapsterMapper;
 
 namespace exanim.core.Services;
 
-public class VEGestorService(IRepository<VECliente> repository, IMapper mapper) : IVEGestorService
+public class VEClienteService(IRepository<VECliente> repository, IMapper mapper) : IVEClienteService
 {
     private readonly IRepository<VECliente> _repo = repository;
     private readonly IMapper _map = mapper;
 
-    public async Task<VEGestorDTO> AddAsync(VEGestorDTO dto)
+    public async Task<VEClienteDTO> AddAsync(VEClienteDTO dto)
     {
         try
         {
             VECliente mod = _map.Map<VECliente>(dto);
             mod.Id = Guid.NewGuid();
             await _repo.InsertAsync(mod);
-            return dto with { GestorId = mod.Id };
+            return dto with { Id = mod.Id };
         }
         catch (Exception)
         {
@@ -26,7 +26,7 @@ public class VEGestorService(IRepository<VECliente> repository, IMapper mapper) 
         }
     }
 
-    public async Task<VEGestorDTO> AttachAsync(Guid id, VEGestorDTO dto)
+    public async Task<VEClienteDTO> AttachAsync(Guid id, VEClienteDTO dto)
     {
         try
         {
@@ -72,13 +72,13 @@ public class VEGestorService(IRepository<VECliente> repository, IMapper mapper) 
         }
     }
 
-    public async Task<VEGestorDTO> PickAsync(Guid id)
+    public async Task<VEClienteDTO> PickAsync(Guid id)
     {
         try
         {
             VECliente? mod = await _repo.GetAsync(id);
             if (mod is null) throw new Exception("Record not found");
-            return _map.Map<VEGestorDTO>(mod);
+            return _map.Map<VEClienteDTO>(mod);
         }
         catch (Exception)
         {

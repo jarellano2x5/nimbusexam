@@ -57,7 +57,7 @@ public static class MapperProfile
             .Map(d => d.Name, s => s.Nombre);
         TypeAdapterConfig<VECliente, Item>.NewConfig()
             .Map(d => d.Id, s => s.Id);
-        TypeAdapterConfig<VEGestorDTO, VECliente>.NewConfig()
+        TypeAdapterConfig<VEClienteDTO, VECliente>.NewConfig()
             .Map(d => d.CompaniaId, s => s.Compania.Id);
         TypeAdapterConfig<VEUnidad, Item>.NewConfig()
             .Map(d => d.Id, s => s.Id)
