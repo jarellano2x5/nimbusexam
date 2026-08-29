@@ -26,9 +26,9 @@ public class Repository<T> : IRepository<T> where T : Entity
         return await _ctx.Set<T>().FindAsync(id);
     }
 
-    public async Task<T?> GetAsync(Expression<Func<T, bool>> query)
+    public async Task<T?> GetAsync(Expression<Func<T, bool>> query, bool include = false)
     {
-        return await Mount(false, false).Where(query).FirstOrDefaultAsync();
+        return await Mount(false, include).Where(query).FirstOrDefaultAsync();
     }
 
     public async Task InsertAsync(T model)

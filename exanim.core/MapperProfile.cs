@@ -9,13 +9,13 @@ public static class MapperProfile
     public static void Configure()
     {
         TypeAdapterConfig<Brand, Item>.NewConfig()
-            .Map(d => d.Id, s => s.BrandId);
+            .Map(d => d.Id, s => s.Id);
         TypeAdapterConfig<CFAfiliadoDTO, CFUsuario>.NewConfig();
         TypeAdapterConfig<CFAgencia, CFAgenciaDTO>.NewConfig()
             .Map(d => d.Tipo, s => new Option { Id = (byte)s.Tipo, Name = s.Tipo.ToString() })
             .Map(d => d.Plan, s => new Option { Id = (byte)s.Plan, Name = s.Plan.ToString() });
         TypeAdapterConfig<CFAgencia, Item>.NewConfig()
-            .Map(d => d.Id, s => s.AgenciaId)
+            .Map(d => d.Id, s => s.Id)
             .Map(d => d.Name, s => s.Nombre)
             .Map(d => d.Code, s => s.RFC);
         TypeAdapterConfig<CFAgenciaDTO, CFAgencia>.NewConfig()
@@ -27,7 +27,7 @@ public static class MapperProfile
             .Map(d => d.Code, s => s.Valor.ToString());
         TypeAdapterConfig<CFSignedDTO, CFUsuario>.NewConfig();
         TypeAdapterConfig<CFTaller, Item>.NewConfig()
-            .Map(d => d.Id, s => s.TallerId)
+            .Map(d => d.Id, s => s.Id)
             .Map(d => d.Name, s => s.Nombre)
             .Map(d => d.Code, s => s.Codigo);
         TypeAdapterConfig<CFTallerDTO, CFTaller>.NewConfig()
@@ -38,29 +38,29 @@ public static class MapperProfile
         TypeAdapterConfig<CFParametro, CFParametroDTO>.NewConfig()
             .Map(d => d.Tipo, s => new Option { Id = (byte)s.Tipo, Name = s.Tipo.ToString() });
         TypeAdapterConfig<CFParametro, Item>.NewConfig()
-            .Map(d => d.Id, s => s.ParametroId)
+            .Map(d => d.Id, s => s.Id)
             .Map(d => d.Name, s => s.Clave)
             .Map(d => d.Code, s => s.Tipo.ToString());
         TypeAdapterConfig<CFParametroDTO, CFParametro>.NewConfig()
             .Map(d => d.Tipo, s => s.Tipo.Id);
-        TypeAdapterConfig<CFPerfil, CFPerfilDTO>.NewConfig()
-            .Map(d => d.Grupo, s => new Option { Id = (byte)s.Grupo, Name = s.Grupo.ToString() });
+        //TypeAdapterConfig<CFPerfil, CFPerfilDTO>.NewConfig()
+        //    .Map(d => d.Grupo, s => new Option { Id = (byte)s.Grupo, Name = s.Grupo.ToString() });
         TypeAdapterConfig<CFPerfil, Item>.NewConfig()
-            .Map(d => d.Id, s => s.PerfilId)
+            .Map(d => d.Id, s => s.Id)
             .Map(d => d.Name, s => s.Nombre);
-        TypeAdapterConfig<CFPerfilDTO, CFPerfil>.NewConfig()
-            .Map(d => d.Grupo, s => s.Grupo.Id);
+        //TypeAdapterConfig<CFPerfilDTO, CFPerfil>.NewConfig()
+        //    .Map(d => d.Grupo, s => s.Grupo.Id);
         TypeAdapterConfig<OPClaseDTO, OPClase>.NewConfig()
             .Map(d => d.AgenciaId, s => s.Agencia.Id);
         TypeAdapterConfig<OPClase, Item>.NewConfig()
-            .Map(d => d.Id, s => s.ClaseId)
+            .Map(d => d.Id, s => s.Id)
             .Map(d => d.Name, s => s.Nombre);
-        TypeAdapterConfig<VEGestor, Item>.NewConfig()
-            .Map(d => d.Id, s => s.GestorId);
-        TypeAdapterConfig<VEGestorDTO, VEGestor>.NewConfig()
+        TypeAdapterConfig<VECliente, Item>.NewConfig()
+            .Map(d => d.Id, s => s.Id);
+        TypeAdapterConfig<VEGestorDTO, VECliente>.NewConfig()
             .Map(d => d.CompaniaId, s => s.Compania.Id);
         TypeAdapterConfig<VEUnidad, Item>.NewConfig()
-            .Map(d => d.Id, s => s.UnidadId)
+            .Map(d => d.Id, s => s.Id)
             .Map(d => d.Code, s => s.Placa)
             .Map(d => d.Name, s => $"{s.Modelo} / {s.Anio}");
         TypeAdapterConfig<VEUnidadDTO, VEUnidad>.NewConfig()

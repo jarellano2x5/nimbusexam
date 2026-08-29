@@ -18,9 +18,9 @@ public class CFTallerService(IRepository<CFTaller> repository, IMapper mapper) :
             CFTaller? ck = await _repo.GetAsync(a => a.Codigo == dto.Codigo);
             if (ck != null) throw new Exception("Record already exists");
             CFTaller mod = _map.Map<CFTaller>(dto);
-            mod.TallerId = Guid.NewGuid();
+            mod.Id = Guid.NewGuid();
             await _repo.InsertAsync(mod);
-            return dto with { TallerId = mod.TallerId };
+            return dto with { TallerId = mod.Id };
         }
         catch (Exception)
         {
@@ -32,7 +32,7 @@ public class CFTallerService(IRepository<CFTaller> repository, IMapper mapper) :
     {
         try
         {
-            CFTaller? ck = await _repo.GetAsync(t => t.Codigo == dto.Codigo && t.TallerId != id);
+            CFTaller? ck = await _repo.GetAsync(t => t.Codigo == dto.Codigo && t.Id != id);
             if (ck != null) throw new Exception("Record already exists");
             CFTaller? mod = await _repo.GetAsync(id);
             if (mod is null) throw new Exception("Record not found");

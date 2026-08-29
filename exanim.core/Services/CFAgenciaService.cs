@@ -18,9 +18,9 @@ public class CFAgenciaService(IRepository<CFAgencia> repository, IMapper mapper)
             CFAgencia? ck = await _repo.GetAsync(a => a.RFC == dto.RFC);
             if (ck != null) throw new Exception("Record already exists");
             CFAgencia mod = _map.Map<CFAgencia>(dto);
-            mod.AgenciaId = Guid.NewGuid();
+            mod.Id = Guid.NewGuid();
             await _repo.InsertAsync(mod);
-            return dto with { AgenciaId = mod.AgenciaId };
+            return dto with { AgenciaId = mod.Id };
         }
         catch (Exception)
         {
@@ -32,7 +32,7 @@ public class CFAgenciaService(IRepository<CFAgencia> repository, IMapper mapper)
     {
         try
         {
-            CFAgencia? ck = await _repo.GetAsync(a => a.RFC == dto.RFC && a.AgenciaId != id);
+            CFAgencia? ck = await _repo.GetAsync(a => a.RFC == dto.RFC && a.Id != id);
             if (ck != null) throw new Exception("Record already exists");
             CFAgencia? mod = await _repo.GetAsync(id);
             if (mod is null) throw new Exception("Record not found");

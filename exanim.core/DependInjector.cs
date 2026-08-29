@@ -10,7 +10,6 @@ public static class DependInjector
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddScoped<IBrandService, BrandService>();
-        services.AddScoped<ICFAfiliadoService, CFAfiliadoService>();
         services.AddScoped<ICFAgenciaService, CFAgenciaService>();
         services.AddScoped<ICFConfiguraService, CFConfiguraService>();
         services.AddScoped<ICFParametroService, CFParametroService>();

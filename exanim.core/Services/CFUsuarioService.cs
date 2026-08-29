@@ -21,9 +21,9 @@ public class CFUsuarioService : ICFUsuarioService
         try
         {
             CFUsuario model = _mapper.Map<CFUsuario>(dto);
-            model.UsuarioId = Guid.NewGuid();
+            model.Id = Guid.NewGuid();
             await _repo.InsertAsync(model);
-            dto.UsuarioId = model.UsuarioId;
+            dto.UsuarioId = model.Id;
             return dto;
         }
         catch (Exception)

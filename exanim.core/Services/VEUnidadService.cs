@@ -20,10 +20,10 @@ public class VEUnidadService(
         try
         {
             VEUnidad mdl = _map.Map<VEUnidad>(dto);
-            mdl.UnidadId = Guid.NewGuid();
+            mdl.Id = Guid.NewGuid();
             mdl.Registrado = DateTime.Now;
             await _repo.InsertAsync(mdl);
-            return dto with { UnidadId = mdl.UnidadId };
+            return dto with { UnidadId = mdl.Id };
         }
         catch (Exception)
         {

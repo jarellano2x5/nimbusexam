@@ -2,7 +2,6 @@ namespace exanim.core.Entities;
 
 public class VECotizacion : Entity
 {
-    public Guid CotizacionId { get; set; }
     public DateTime Fecha { get; set; }
     public string Clave { get; set; } = string.Empty;
     public double Monto { get; set; }

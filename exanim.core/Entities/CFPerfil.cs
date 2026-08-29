@@ -5,7 +5,9 @@ namespace exanim.core.Entities;
 
 public class CFPerfil : Entity
 {
-    public Guid PerfilId { get; set; }
     public string Nombre { get; set; } = string.Empty;
-    public CFGrupoEnum Grupo { get; set; }
+    public Guid AgenciaId { get; set; }
+    public bool Activo { get; set; }
+
+    public virtual ICollection<CFRol> Roles { get; set; } = [];
 }

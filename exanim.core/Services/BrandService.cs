@@ -16,9 +16,9 @@ public class BrandService(IRepository<Brand> repository, IMapper mapper) : IBran
         try
         {
             Brand mdl = dto.Adapt<Brand>();
-            mdl.BrandId = Guid.NewGuid();
+            mdl.Id = Guid.NewGuid();
             await _repo.InsertAsync(mdl);
-            return dto with { BrandId = mdl.BrandId };
+            return dto with { BrandId = mdl.Id };
         }
         catch (Exception)
         {

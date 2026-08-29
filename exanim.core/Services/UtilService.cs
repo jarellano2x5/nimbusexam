@@ -11,8 +11,8 @@ public class UtilService(IMapper mapper) : IUtilService
 
     public IEnumerable<Option> GetPerfil()
     {
-        IEnumerable<Option> ls = Enum.GetValues(typeof(CFGrupoEnum))
-            .Cast<CFGrupoEnum>()
+        IEnumerable<Option> ls = Enum.GetValues(typeof(RolEnum))
+            .Cast<RolEnum>()
             .Select(e => new Option
             {
                 Id = (byte)e,

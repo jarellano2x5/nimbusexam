@@ -18,9 +18,9 @@ public class CFParametroService(IRepository<CFParametro> repository, IMapper map
             CFParametro? ck = await _repo.GetAsync(p => p.Clave == dto.Clave);
             if (ck != null) throw new Exception("Record already exists");
             CFParametro mod = _map.Map<CFParametro>(dto);
-            mod.ParametroId = Guid.NewGuid();
+            mod.Id = Guid.NewGuid();
             await _repo.InsertAsync(mod);
-            return dto with { ParametroId = mod.ParametroId };
+            return dto with { ParametroId = mod.Id };
         }
         catch (Exception)
         {
@@ -32,7 +32,7 @@ public class CFParametroService(IRepository<CFParametro> repository, IMapper map
     {
         try
         {
-            CFParametro? ck = await _repo.GetAsync(p => p.Clave == dto.Clave && p.ParametroId != id);
+            CFParametro? ck = await _repo.GetAsync(p => p.Clave == dto.Clave && p.Id != id);
             if (ck != null) throw new Exception("Record already exists");
             CFParametro? mod = await _repo.GetAsync(id);
             if (mod is null) throw new Exception("Record not found");

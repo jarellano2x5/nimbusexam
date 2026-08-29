@@ -6,19 +6,19 @@ using MapsterMapper;
 
 namespace exanim.core.Services;
 
-public class VEGestorService(IRepository<VEGestor> repository, IMapper mapper) : IVEGestorService
+public class VEGestorService(IRepository<VECliente> repository, IMapper mapper) : IVEGestorService
 {
-    private readonly IRepository<VEGestor> _repo = repository;
+    private readonly IRepository<VECliente> _repo = repository;
     private readonly IMapper _map = mapper;
 
     public async Task<VEGestorDTO> AddAsync(VEGestorDTO dto)
     {
         try
         {
-            VEGestor mod = _map.Map<VEGestor>(dto);
-            mod.GestorId = Guid.NewGuid();
+            VECliente mod = _map.Map<VECliente>(dto);
+            mod.Id = Guid.NewGuid();
             await _repo.InsertAsync(mod);
-            return dto with { GestorId = mod.GestorId };
+            return dto with { GestorId = mod.Id };
         }
         catch (Exception)
         {
@@ -30,7 +30,7 @@ public class VEGestorService(IRepository<VEGestor> repository, IMapper mapper) :
     {
         try
         {
-            VEGestor? mod = await _repo.GetAsync(id);
+            VECliente? mod = await _repo.GetAsync(id);
             if (mod is null) throw new Exception("Record not found");
             mod.Adapt(dto);
             await _repo.UpdateAsync(mod);
@@ -46,7 +46,7 @@ public class VEGestorService(IRepository<VEGestor> repository, IMapper mapper) :
     {
         try
         {
-            VEGestor? mod = await _repo.GetAsync(id);
+            VECliente? mod = await _repo.GetAsync(id);
             if (mod is null) throw new Exception("Record not found");
             if (!mod.Activo) return false;
             mod.Activo = false;
@@ -63,7 +63,7 @@ public class VEGestorService(IRepository<VEGestor> repository, IMapper mapper) :
     {
         try
         {
-            IEnumerable<VEGestor> ls = await _repo.SearchAsync(s => 1 == 1);
+            IEnumerable<VECliente> ls = await _repo.SearchAsync(s => 1 == 1);
             return _map.Map<IEnumerable<Item>>(ls);
         }
         catch (Exception)
@@ -76,7 +76,7 @@ public class VEGestorService(IRepository<VEGestor> repository, IMapper mapper) :
     {
         try
         {
-            VEGestor? mod = await _repo.GetAsync(id);
+            VECliente? mod = await _repo.GetAsync(id);
             if (mod is null) throw new Exception("Record not found");
             return _map.Map<VEGestorDTO>(mod);
         }

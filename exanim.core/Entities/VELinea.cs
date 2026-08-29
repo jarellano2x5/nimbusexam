@@ -2,7 +2,6 @@ namespace exanim.core.Entities;
 
 public class VELinea : Entity
 {
-    public Guid LineaId { get; set; }
     public string Clave { get; set; } = string.Empty;
     public string Unidad { get; set; } = string.Empty;
     public string Concepto { get; set; } = string.Empty;

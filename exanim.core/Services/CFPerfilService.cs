@@ -17,9 +17,9 @@ public class CFPerfilService(
         try
         {
             CFPerfil mod = _map.Map<CFPerfil>(dto);
-            mod.PerfilId = Guid.NewGuid();
+            mod.Id = Guid.NewGuid();
             await _repo.InsertAsync(mod);
-            return dto with { PerfilId = mod.PerfilId };
+            return dto with { PerfilId = mod.Id };
         }
         catch (Exception)
         {

@@ -30,7 +30,7 @@ public class AppCtx : DbContext
     public DbSet<OPRemocion> Remociones { get; set; }
     public DbSet<VECompania> Companias { get; set; }
     public DbSet<VECotizacion> Cotizaciones { get; set; }
-    public DbSet<VEGestor> Gestores { get; set; }
+    public DbSet<VECliente> Gestores { get; set; }
     public DbSet<VELinea> Lineas { get; set; }
     public DbSet<VEUnidad> Unidades { get; set; }
 
@@ -38,7 +38,7 @@ public class AppCtx : DbContext
     {
         modelBuilder.Entity<Brand>(entity =>
         {
-            entity.HasKey(e => e.BrandId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_Brand");
             entity.ToTable("Brand");
 
@@ -54,7 +54,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<CFAgencia>(entity =>
         {
-            entity.HasKey(e => e.AgenciaId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_CFAgencia");
             entity.ToTable("CFAgencia");
 
@@ -114,7 +114,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<CFOperador>(entity =>
         {
-            entity.HasKey(e => e.OperadorId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_CFOperador");
             entity.ToTable("CFOperador");
 
@@ -123,7 +123,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<CFParametro>(entity =>
         {
-            entity.HasKey(e => e.ParametroId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_CFParametro");
             entity.ToTable("CFParametro");
 
@@ -139,25 +139,9 @@ public class AppCtx : DbContext
                 .IsRequired();
         });
 
-        modelBuilder.Entity<CFPerfil>(entity =>
-        {
-            entity.HasKey(e => e.PerfilId)
-                .HasName("PK_CFPerfil");
-            entity.ToTable("CFPerfil");
-
-            entity.Property(e => e.Nombre).HasMaxLength(15)
-                .IsUnicode(false).IsRequired();
-
-            entity.HasMany<CFUsuario>()
-                .WithOne()
-                .HasForeignKey(e => e.PerfilId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-        });
-
         modelBuilder.Entity<CFTaller>(entity =>
         {
-            entity.HasKey(e => e.TallerId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_CFTaller");
             entity.ToTable("CFTaller");
 
@@ -180,67 +164,10 @@ public class AppCtx : DbContext
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
         });
-
-        modelBuilder.Entity<CFUsuario>(entity =>
-        {
-            entity.HasKey(e => e.UsuarioId)
-                .HasName("PK_CFUsuario");
-            entity.ToTable("CFUsuario");
-
-            entity.Property(e => e.Nombre).HasMaxLength(150)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Usuario).HasMaxLength(20)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Password).HasMaxLength(300)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Correo).HasMaxLength(150)
-                .IsUnicode(false).IsRequired();
-
-            entity.HasMany<CFAgencia>()
-                .WithOne()
-                .HasForeignKey(e => e.UsuarioId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<CFOperador>()
-                .WithOne()
-                .HasForeignKey(e => e.UsuarioId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<CFTaller>()
-                .WithOne()
-                .HasForeignKey(e => e.UsuarioId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<OPAvance>()
-                .WithOne()
-                .HasForeignKey(e => e.UsuarioId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<OPOrden>()
-                .WithOne()
-                .HasForeignKey(e => e.UsuarioId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<OPPieza>()
-                .WithOne()
-                .HasForeignKey(e => e.UsuarioId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<VECotizacion>()
-                .WithOne()
-                .HasForeignKey(e => e.UsuarioId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<VEGestor>()
-                .WithOne()
-                .HasForeignKey(e => e.UsuarioId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-        });
-
+        
         modelBuilder.Entity<OPAccion>(entity =>
         {
-            entity.HasKey(e => e.AccionId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_OPAccion");
             entity.ToTable("OPAccion");
 
@@ -253,7 +180,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<OPAutoriza>(entity =>
         {
-            entity.HasKey(e => e.AutorizaId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_OPAutoriza");
             entity.ToTable("OPAutoriza");
 
@@ -263,7 +190,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<OPAvance>(entity =>
         {
-            entity.HasKey(e => e.AvanceId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_OPAvance");
             entity.ToTable("OPAvance");
 
@@ -282,7 +209,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<OPClase>(entity =>
         {
-            entity.HasKey(e => e.ClaseId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_OPClase");
             entity.ToTable("OPClase");
 
@@ -298,7 +225,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<OPEstatus>(entity =>
         {
-            entity.HasKey(e => e.EstatusId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_OPEstatus");
             entity.ToTable("OPEstatus");
 
@@ -331,7 +258,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<OPInstalacion>(entity =>
         {
-            entity.HasKey(e => e.InstalacionId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_OPInstalacion");
             entity.ToTable("OPInstalacion");
 
@@ -346,7 +273,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<OPOrden>(entity =>
         {
-            entity.HasKey(e => e.OrdenId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_OPOrden");
             entity.ToTable("OPOrden");
 
@@ -378,7 +305,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<OPPaso>(entity =>
         {
-            entity.HasKey(e => e.PasoId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_OPPaso");
             entity.ToTable("OPPaso");
 
@@ -391,7 +318,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<OPPieza>(entity =>
         {
-            entity.HasKey(e => e.PiezaId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_OPPieza");
             entity.ToTable("OPPieza");
 
@@ -412,7 +339,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<OPRemocion>(entity =>
         {
-            entity.HasKey(e => e.RemocionId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_OPRemocion");
             entity.ToTable("OPRemocion");
 
@@ -427,7 +354,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<VECompania>(entity =>
         {
-            entity.HasKey(e => e.CompaniaId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_VECompania");
             entity.ToTable("VECompania");
 
@@ -438,16 +365,16 @@ public class AppCtx : DbContext
             entity.Property(e => e.Nombre).HasMaxLength(50)
                 .IsUnicode(false).IsRequired();
 
-            entity.HasMany<VEGestor>()
+            entity.HasMany<VECliente>()
                 .WithOne()
                 .HasForeignKey(e => e.CompaniaId)
                 .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
+                .IsRequired(false);
         });
 
         modelBuilder.Entity<VECotizacion>(entity =>
         {
-            entity.HasKey(e => e.CotizacionId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_VECotizacion");
             entity.ToTable("VECotizacion");
 
@@ -463,11 +390,11 @@ public class AppCtx : DbContext
                 .IsRequired();
         });
 
-        modelBuilder.Entity<VEGestor>(entity =>
+        modelBuilder.Entity<VECliente>(entity =>
         {
-            entity.HasKey(e => e.GestorId)
-                .HasName("PK_VEGestor");
-            entity.ToTable("VEGestor");
+            entity.HasKey(e => e.Id)
+                .HasName("PK_VECliente");
+            entity.ToTable("VECliente");
 
             entity.HasMany<OPOrden>()
                 .WithOne()
@@ -478,7 +405,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<VELinea>(entity =>
         {
-            entity.HasKey(e => e.LineaId)
+            entity.HasKey(e => e.Id)
                 .HasName("PK_VELinea");
             entity.ToTable("VELinea");
 
@@ -492,7 +419,7 @@ public class AppCtx : DbContext
 
         modelBuilder.Entity<VEUnidad>(entity =>
         {
-            entity.HasKey(e => e.UnidadId).HasName("PK_VEUnidad");
+            entity.HasKey(e => e.Id).HasName("PK_VEUnidad");
             entity.ToTable("VEUnidad");
 
             entity.Property(e => e.Placa).HasMaxLength(15)
@@ -513,5 +440,6 @@ public class AppCtx : DbContext
         });
         
         base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppCtx).Assembly);
     }
 }

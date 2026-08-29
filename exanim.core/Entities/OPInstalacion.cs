@@ -2,7 +2,6 @@ namespace exanim.core.Entities;
 
 public class OPInstalacion : Entity
 {
-    public Guid InstalacionId { get; set; }
     public string Marca { get; set; } = string.Empty;
     public float Cantidad { get; set; }
     public string Serie { get; set; } = string.Empty;

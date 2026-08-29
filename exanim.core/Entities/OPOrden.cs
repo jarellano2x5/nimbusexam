@@ -2,7 +2,6 @@ namespace exanim.core.Entities;
 
 public class OPOrden : Entity
 {
-    public Guid OrdenId { get; set; }
     public DateTime Fecha { get; set; }
     public string Problema { get; set; } = string.Empty;
     public string Condicion { get; set; } = string.Empty;

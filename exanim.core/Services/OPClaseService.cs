@@ -17,9 +17,9 @@ public class OPClaseService(IRepository<OPClase> repository, IRepository<CFAgenc
         try
         {
             OPClase mod = _map.Map<OPClase>(dto);
-            mod.ClaseId = Guid.NewGuid();
+            mod.Id = Guid.NewGuid();
             await _repo.InsertAsync(mod);
-            return dto with { ClaseId = mod.ClaseId };
+            return dto with { ClaseId = mod.Id };
         }
         catch (Exception)
         {
@@ -68,7 +68,7 @@ public class OPClaseService(IRepository<OPClase> repository, IRepository<CFAgenc
     {
         try
         {
-            OPClase? mod = await _repo.GetAsync(c => c.ClaseId == id);
+            OPClase? mod = await _repo.GetAsync(c => c.Id == id);
             if (mod is null) throw new Exception("Record not found");
             OPClaseDTO dto = _map.Map<OPClaseDTO>(mod);
             dto.Agencia = _map.Map<Item>(await _agenRepo.GetAsync(mod.AgenciaId));
