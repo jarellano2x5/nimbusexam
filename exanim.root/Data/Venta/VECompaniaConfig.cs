@@ -24,5 +24,9 @@ public class VECompaniaConfig : IEntityTypeConfiguration<VECompania>
             .HasForeignKey(e => e.CompaniaId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired(false);
+        builder.HasMany<VECliente>()
+            .WithOne(e => e.Compania)
+            .HasForeignKey(e => e.CompaniaId)
+            .IsRequired(false);
     }
 }

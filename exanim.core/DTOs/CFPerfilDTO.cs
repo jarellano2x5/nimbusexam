@@ -4,8 +4,10 @@ namespace exanim.core.DTOs;
 
 public record CFPerfilDTO
 {
-    public Guid PerfilId { get; set; }
+    public Guid? Id { get; set; }
     [Length(3, 15)]
     public string Nombre { get; set; } = string.Empty;
-    public Option Grupo { get; set; } = null!;
+    public Guid AgenciaId { get; set; }
+    public bool Activo { get; set; }
+    public IEnumerable<Option> Rols { get; set; } = [];
 }

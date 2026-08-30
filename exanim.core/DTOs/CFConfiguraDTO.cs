@@ -4,6 +4,7 @@ namespace exanim.core.DTOs;
 
 public record class CFConfiguraDTO
 {
+    public Guid? Id { get; set; }
     [Required]
     public Guid AgenciaId { get; set; }
     [Required]

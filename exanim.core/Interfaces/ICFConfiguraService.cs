@@ -2,7 +2,7 @@ using exanim.core.DTOs;
 
 namespace exanim.core.Interfaces;
 
-public interface ICFConfiguraService : IService<CFConfiguraDTO>
+public interface ICFConfiguraService : IChunk<CFConfiguraDTO>
 {
-    Task<IEnumerable<Item>> ItemsAsync(Guid idAgencia);
+    Task<IEnumerable<Item>> ItemsAsync(Guid idAgencia, CancellationToken ct = default);
 }

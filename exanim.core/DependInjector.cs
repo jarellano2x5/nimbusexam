@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using exanim.core.Interfaces;
 using exanim.core.Services;
-using Mapster;
 
 namespace exanim.core;
 
@@ -19,8 +18,6 @@ public static class DependInjector
         services.AddScoped<IUtilService, UtilService>();
         services.AddScoped<IVEClienteService, VEClienteService>();
         services.AddScoped<IVEUnidadService, VEUnidadService>();
-        services.AddMapster();
-        MapperProfile.Configure();
 
         return services;
     }

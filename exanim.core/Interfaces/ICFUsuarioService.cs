@@ -4,5 +4,5 @@ namespace exanim.core.Interfaces;
 
 public interface ICFUsuarioService : IService<CFUsuarioDTO>
 {
-    Task<IEnumerable<CFUsuarioDTO>> AllAsync();
+    Task<IEnumerable<CFUsuarioDTO>> AllAsync(CancellationToken ct = default);
 }

@@ -1,29 +1,22 @@
 using exanim.core.DTOs;
 using exanim.core.Entities;
 using exanim.core.Interfaces;
-using Mapster;
-using MapsterMapper;
+using exanim.core.Storages;
 
 namespace exanim.core.Services;
 
-public class VEUnidadService(
-    IRepository<VEUnidad> repository, IMapper mapper,
-    IRepository<Brand> repositoryBrand
-) : IVEUnidadService
+public class VEUnidadService(IUnitOfWork unitOfWork) : IVEUnidadService
 {
-    private readonly IRepository<VEUnidad> _repo = repository;
-    private readonly IRepository<Brand> _repoB = repositoryBrand;
-    private readonly IMapper _map = mapper;
+    private readonly IUnitOfWork _unit = unitOfWork;
 
-    public async Task<VEUnidadDTO> AddAsync(VEUnidadDTO dto)
+    public async Task<VEUnidadDTO> AddAsync(VEUnidadDTO dto, CancellationToken ct = default)
     {
         try
         {
-            VEUnidad mdl = _map.Map<VEUnidad>(dto);
-            mdl.Id = Guid.NewGuid();
-            mdl.Registrado = DateTime.Now;
-            await _repo.InsertAsync(mdl);
-            return dto with { UnidadId = mdl.Id };
+            VEUnidad mod = dto.ToModel();
+            _unit.Unidades.InsertAsync(mod);
+            await _unit.CommitAsync(ct);
+            return dto with { Id = mod.Id };
         }
         catch (Exception)
         {
@@ -31,14 +24,31 @@ public class VEUnidadService(
         }
     }
 
-    public async Task<VEUnidadDTO> AttachAsync(Guid id, VEUnidadDTO dto)
+    public async Task<bool> DownAsync(Guid id, CancellationToken ct = default)
     {
         try
         {
-            VEUnidad? mdl = await _repo.GetAsync(id);
-            if (mdl is null) throw new Exception("Record not found");
-            mdl.Adapt(dto);
-            await _repo.UpdateAsync(mdl);
+            VEUnidad? mod = await _unit.Unidades.GetAsync(id, ct);
+            ArgumentNullException.ThrowIfNull(mod, "record not found");
+            mod.Activo = false;
+            _unit.Unidades.UpdateAsync(mod);
+            await _unit.CommitAsync(ct);
+            return true;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    public async Task<VEUnidadDTO> FixAsync(Guid id, VEUnidadDTO dto, CancellationToken ct = default)
+    {
+        try
+        {
+            VEUnidad? mod = await _unit.Unidades.GetAsync(id, ct);
+            ArgumentNullException.ThrowIfNull(mod, "record not found");
+            _unit.Unidades.UpdateAsync(mod.ToExists(dto));
+            await _unit.CommitAsync(ct);
             return dto;
         }
         catch (Exception)
@@ -47,17 +57,13 @@ public class VEUnidadService(
         }
     }
 
-    public Task<bool> DownAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<IEnumerable<Item>> ItemsAsync(string srch)
+    public async Task<IEnumerable<Item>> ItemsAsync(string srch, CancellationToken ct = default)
     {
         try
         {
-            IEnumerable<VEUnidad> ls = await _repo.SearchAsync(v => v.Placa.Contains(srch) || v.Modelo.Contains(srch) || v.Anio.Contains(srch) || v.Color.Contains(srch));
-            return _map.Map<IEnumerable<Item>>(ls);
+            IEnumerable<VEUnidad> ls = await _unit.Unidades
+                .SearchAsync(u => u.Activo == true, ct: ct);
+            return ls.Select(u => u.ToItem());
         }
         catch (Exception)
         {
@@ -65,16 +71,13 @@ public class VEUnidadService(
         }
     }
 
-    public async Task<VEUnidadDTO> PickAsync(Guid id)
+    public async Task<VEUnidadDTO> PickAsync(Guid id, CancellationToken ct = default)
     {
         try
         {
-            VEUnidad? mdl = await _repo.GetAsync(id);
-            if (mdl is null) throw new Exception("Record not found");
-            VEUnidadDTO dto = mdl.Adapt<VEUnidadDTO>();
-            Brand? br = await _repoB.GetAsync(mdl.MarcaId);
-            dto.Marca = _map.Map<Item>(br!);
-            return dto;
+            VEUnidad? mod = await _unit.Unidades.GetAsync(id, ct);
+            ArgumentNullException.ThrowIfNull(mod, "record not found");
+            return mod.ToDto();
         }
         catch (Exception)
         {

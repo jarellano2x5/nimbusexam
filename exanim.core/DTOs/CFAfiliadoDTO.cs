@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace exanim.core.DTOs;
 
-public record class CFAfiliadoDTO
+public record CFAfiliadoDTO
 {
-    public Guid UsuarioId { get; set; }
+    public Guid? Id { get; set; }
     [Length(4, 15)]
     [Required]
     public string Usuario { get; set; } = string.Empty;

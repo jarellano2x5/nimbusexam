@@ -1,4 +1,4 @@
-using exanim.core.Interfaces;
+using exanim.core.Storages;
 using exanim.root.Data;
 using exanim.root.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +12,7 @@ public static class DependInjector
     public static IServiceCollection AddRoot(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-        services.AddScoped(typeof(IRepositoryAlt<>), typeof(RepositoryAlt<>));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddDbContext<AppCtx>(opt =>
         {
             opt.UseSqlServer(configuration.GetConnectionString("dbnim"));

@@ -4,5 +4,5 @@ namespace exanim.core.Interfaces;
 
 public interface ICatalog
 {
-    Task<IEnumerable<Item>> ItemsAsync(string srch);
+    Task<IEnumerable<Item>> ItemsAsync(string srch, CancellationToken ct = default);
 }

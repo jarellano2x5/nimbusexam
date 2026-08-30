@@ -4,7 +4,7 @@ namespace exanim.core.DTOs;
 
 public record BrandDTO
 {
-    public Guid BrandId { get; set; }
+    public Guid? Id { get; set; }
     [Required]
     [Length(3, 30)]
     public string Name { get; set; } = string.Empty;

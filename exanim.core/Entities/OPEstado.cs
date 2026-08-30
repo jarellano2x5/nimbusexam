@@ -2,7 +2,7 @@ using exanim.core.Enums;
 
 namespace exanim.core.Entities;
 
-public class OPEstatus : Entity
+public class OPEstado : Entity
 {
     public string Nombre { get; set; } = string.Empty;
     public OPFaseEnum Fase { get; set; }

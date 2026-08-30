@@ -4,11 +4,11 @@ namespace exanim.core.DTOs;
 
 public record VEClienteDTO
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     [Required]
     public bool Activo { get; set; }
     [Required]
-    public Guid UsuarioId { get; set; }
+    public Item Usuario { get; set; } = null!;
     [Required]
-    public Item Compania { get; set; } = null!;
+    public Item? Compania { get; set; }
 }

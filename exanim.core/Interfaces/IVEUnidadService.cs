@@ -4,5 +4,5 @@ namespace exanim.core.Interfaces;
 
 public interface IVEUnidadService : IService<VEUnidadDTO>, ICatalog
 {
-
+    
 }

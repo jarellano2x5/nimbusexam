@@ -1,87 +1,78 @@
 using exanim.core.DTOs;
 using exanim.core.Entities;
 using exanim.core.Interfaces;
-using Mapster;
-using MapsterMapper;
+using exanim.core.Storages;
 
 namespace exanim.core.Services;
 
-public class BrandService(IRepository<Brand> repository, IMapper mapper) : IBrandService
+public class BrandService(IUnitOfWork unitOfWork) : IBrandService
 {
-    private readonly IRepository<Brand> _repo = repository;
-    private readonly IMapper _map = mapper;
-
-    public async Task<BrandDTO> AddAsync(BrandDTO dto)
+    private readonly IUnitOfWork _unit = unitOfWork;
+    public async Task<IEnumerable<Item>> ItemsAsync(string srch, CancellationToken ct = default)
     {
         try
         {
-            Brand mdl = dto.Adapt<Brand>();
-            mdl.Id = Guid.NewGuid();
-            await _repo.InsertAsync(mdl);
-            return dto with { BrandId = mdl.Id };
+            IEnumerable<Brand> ls = await _unit.Brands.SearchAsync(b => b.Activo == true);
+            return ls.Select(b => b.ToItem());
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             throw;
         }
     }
 
-    public async Task<BrandDTO> AttachAsync(Guid id, BrandDTO dto)
+    public async Task<int> AddsAsync(IEnumerable<BrandDTO> dtos, CancellationToken ct = default)
     {
         try
         {
-            Brand? mdl = await _repo.GetAsync(id);
-            if (mdl is null) throw new Exception("Record not found");
-            mdl.Adapt(dto);
-            await _repo.UpdateAsync(mdl);
-            return dto;
+            int t = dtos.Count();
+            ArgumentOutOfRangeException.ThrowIfZero(t);
+            IEnumerable<BrandDTO> li = dtos.Where(b => b.Id == null);
+            IEnumerable<BrandDTO> lu = dtos.Where(b => b.Id != null);
+            if (lu.Any())
+            {
+                Guid[] r = lu.Select(b => b.Id!.Value).ToArray();
+                int c = await _unit.Brands.HasAsync(r, ct);
+                ArgumentOutOfRangeException.ThrowIfNotEqual(r.Length, c);
+                _unit.Brands.AttachAsync(lu.Select(b => b.ToPatch()));
+            }
+
+            if (li.Any())
+            {
+                _unit.Brands.AddsAsync(li.Select(b => b.ToModel()));
+            }
+
+            await _unit.CommitAsync(ct);
+            return t;
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             throw;
         }
     }
 
-    public async Task<bool> DownAsync(Guid id)
+    public async Task<bool> DownsAsync(Guid[] ids, CancellationToken ct = default)
     {
         try
         {
-            Brand? mdl = await _repo.GetAsync(id);
-            if (mdl is null) throw new Exception("Record not found");
-            if (!mdl.Activo) return false;
-            mdl.Activo = false;
-            await _repo.UpdateAsync(mdl);
+            int t = ids.Length;
+            ArgumentOutOfRangeException.ThrowIfZero(t);
+            int c = await _unit.Brands.HasAsync(ids, ct);
+            ArgumentOutOfRangeException.ThrowIfNotEqual(t, c);
+            IEnumerable<Brand> lb = await _unit.Brands.SearchAsync(b => ids.Contains(b.Id), ct: ct);
+            foreach (Brand b in lb)
+            {
+                b.Activo = false;
+                _unit.Brands.UpdateAsync(b);
+            }
+            await _unit.CommitAsync(ct);
             return true;
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            throw;
-        }
-    }
-
-    public async Task<IEnumerable<Item>> ItemsAsync(string srch)
-    {
-        try
-        {
-            IEnumerable<Brand> ls = await _repo.SearchAsync(b => b.Name.Contains(srch));
-            return _map.Map<IEnumerable<Item>>(ls);
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-    }
-
-    public async Task<BrandDTO> PickAsync(Guid id)
-    {
-        try
-        {
-            Brand? mdl = await _repo.GetAsync(id);
-            if (mdl is null) throw new Exception("Record not found");
-            return mdl.Adapt<BrandDTO>();
-        }
-        catch (Exception)
-        {
+            Console.WriteLine(e);
             throw;
         }
     }

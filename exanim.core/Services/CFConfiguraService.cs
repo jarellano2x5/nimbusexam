@@ -1,25 +1,40 @@
 using exanim.core.DTOs;
 using exanim.core.Entities;
 using exanim.core.Interfaces;
-using Mapster;
-using MapsterMapper;
+using exanim.core.Storages;
 
 namespace exanim.core.Services;
 
-public class CFConfiguraService(IRepositoryAlt<CFConfigura> repository, IMapper mapper) : ICFConfiguraService
+public class CFConfiguraService(IUnitOfWork unitOfWork) : ICFConfiguraService
 {
-    private readonly IRepositoryAlt<CFConfigura> _repo = repository;
-    private readonly IMapper _map = mapper;
+    private readonly IUnitOfWork _unit = unitOfWork;
 
-    public async Task<CFConfiguraDTO> AddAsync(CFConfiguraDTO dto)
+    public async Task<int> AddsAsync(IEnumerable<CFConfiguraDTO> dtos, CancellationToken ct = default)
     {
         try
         {
-            CFConfigura? ck = await _repo.GetAsync(dto.AgenciaId, dto.ParametroId);
-            if (ck != null) throw new Exception("Record already exists");
-            CFConfigura mod = dto.Adapt<CFConfigura>();
-            await _repo.InsertAsync(mod);
-            return dto;
+            int t = dtos.Count();
+            ArgumentOutOfRangeException.ThrowIfZero(t);
+            IEnumerable<CFConfiguraDTO> li = dtos.Where(c => c.Id == null);
+            IEnumerable<CFConfiguraDTO> lu = dtos.Where(c => c.Id != null);
+            if (lu.Any())
+            {
+                Guid[] r = lu.Select(c => c.Id!.Value).ToArray();
+                int e = await _unit.Configuras.HasAsync(r, ct);
+                ArgumentOutOfRangeException.ThrowIfNotEqual(r.Length, e);
+                IEnumerable<CFConfigura> ls = await _unit.Configuras
+                    .SearchAsync(c => r.Contains(c.Id), ct: ct);
+                IEnumerable<CFConfigura> lf = ls.Join(lu, m => m.Id, d => d.Id, (m, d) => m.ToExists(d));
+                foreach (CFConfigura c in lf)
+                    _unit.Configuras.UpdateAsync(c);
+            }
+            if (li.Any())
+            {
+                foreach (CFConfiguraDTO d in li)
+                    _unit.Configuras.InsertAsync(d.ToModel());
+            }
+            await _unit.CommitAsync(ct);
+            return t;
         }
         catch (Exception)
         {
@@ -27,22 +42,23 @@ public class CFConfiguraService(IRepositoryAlt<CFConfigura> repository, IMapper 
         }
     }
 
-    public Task<CFConfiguraDTO> AttachAsync(Guid id, CFConfiguraDTO dto)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> DownAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<IEnumerable<Item>> ItemsAsync(Guid idAgencia)
+    public async Task<bool> DownsAsync(Guid[] ids, CancellationToken ct = default)
     {
         try
         {
-            IEnumerable<CFConfigura> ls = await _repo.SearchAsync(d => d.AgenciaId == idAgencia);
-            return _map.Map<IEnumerable<Item>>(ls);
+            int t = ids.Length;
+            ArgumentOutOfRangeException.ThrowIfZero(t);
+            int c = await _unit.Configuras.HasAsync(ids, ct);
+            ArgumentOutOfRangeException.ThrowIfNotEqual(t, c);
+            IEnumerable<CFConfigura> lc = await _unit.Configuras
+                .SearchAsync(c => ids.Contains(c.Id), ct: ct);
+            foreach (CFConfigura co in lc)
+            {
+                co.Activo = false;
+                _unit.Configuras.UpdateAsync(co);
+            }
+            await _unit.CommitAsync(ct);
+            return true;
         }
         catch (Exception)
         {
@@ -50,8 +66,17 @@ public class CFConfiguraService(IRepositoryAlt<CFConfigura> repository, IMapper 
         }
     }
 
-    public Task<CFConfiguraDTO> PickAsync(Guid id)
+    public async Task<IEnumerable<Item>> ItemsAsync(Guid idAgencia, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        try
+        {
+            IEnumerable<CFConfigura> ls = await _unit.Configuras
+                .SearchAsync(c => c.Activo == true, ct: ct);
+            return ls.Select(c => c.ToItem());
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 }

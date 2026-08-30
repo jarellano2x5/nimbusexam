@@ -2,8 +2,8 @@ namespace exanim.core.Interfaces;
 
 public interface IService<T> where T : class
 {
-    Task<T> AddAsync(T dto);
-    Task<T> AttachAsync(Guid id, T dto);
-    Task<bool> DownAsync(Guid id);
-    Task<T> PickAsync(Guid id);
+    Task<T> AddAsync(T dto, CancellationToken ct = default);
+    Task<T> FixAsync(Guid id, T dto, CancellationToken ct = default);
+    Task<bool> DownAsync(Guid id, CancellationToken ct = default);
+    Task<T> PickAsync(Guid id, CancellationToken ct = default);
 }

@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using exanim.core.Entities;
 
 namespace exanim.core.DTOs;
 
 public record CFTallerDTO
 {
-    public Guid TallerId { get; set; }
+    public Guid? Id { get; set; }
     [Required]
     [Length(3, 15)]
     public string Codigo { get; set; } = string.Empty;
@@ -15,7 +16,7 @@ public record CFTallerDTO
     [MaxLength(150)]
     public string Direccion { get; set; } = string.Empty;
     [Required]
-    public LocationDTO Lugar { get; set; } = null!;
+    public Location Lugar { get; set; } = null!;
     [Required]
     public bool Activo { get; set; }
     public Item Agencia { get; set; } = null!;

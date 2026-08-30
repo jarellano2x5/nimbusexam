@@ -4,7 +4,7 @@ namespace exanim.core.DTOs;
 
 public record OPClaseDTO
 {
-    public Guid ClaseId { get; set; }
+    public Guid? Id { get; set; }
     [Length(3, 45)]
     public string Nombre { get; set; } = string.Empty;
     [Required]

@@ -2,28 +2,25 @@ using exanim.core.DTOs;
 using exanim.core.Entities;
 using exanim.core.Helpers;
 using exanim.core.Interfaces;
-using Mapster;
+using exanim.core.Storages;
 
 namespace exanim.core.Services;
 
-public class CFLoginService(IRepository<CFUsuario> repo,
-    IRepository<CFSocio> repSoc,
-    IRepository<CFPerfil> repPer,
+public class CFLoginService(
+    IUnitOfWork unitOfWork,
     IHashHelper hash, ITokenHelper help
     ) : ICFLoginService
 {
-    public async Task<CFSignedDTO> Register(CFRegisterDTO dto)
+    private readonly IUnitOfWork _unit = unitOfWork;
+    public async Task<CFSignedDTO> Register(CFRegisterDTO dto, CancellationToken ct = default)
     {
         try
         {
-            CFUsuario? ck = await repo.GetAsync(u => u.Usuario == dto.Usuario);
-            if (ck != null)
-                throw new InvalidDataException("User already exists");
-            CFUsuario mod = dto.Adapt<CFUsuario>();
-            mod.Id = Guid.NewGuid();
-            mod.Activo = true;
-            mod.EsTitular = true;
-            await repo.InsertAsync(mod);
+            CFUsuario? ck = await _unit.Usuarios.GetAsync(u => u.Usuario == dto.Usuario, ct: ct);
+            ArgumentNullException.ThrowIfNull(ck, "User already exists");
+            CFUsuario mod = dto.ToModel(hash.Create(dto.Password));
+            _unit.Usuarios.InsertAsync(mod);
+            await _unit.CommitAsync(ct);
             string tk = help.Generar(mod.Usuario, mod.Id.ToString(), null);
             return new CFSignedDTO(mod.Usuario, mod.EsTitular, null, tk);
         }
@@ -34,19 +31,19 @@ public class CFLoginService(IRepository<CFUsuario> repo,
         }
     }
 
-    public async Task<CFSignedDTO> Login(CFLoginDTO dto)
+    public async Task<CFSignedDTO> Login(CFLoginDTO dto, CancellationToken ct = default)
     {
         try
         {
-            CFUsuario? mod = await repo.GetAsync(u => u.Usuario == dto.Usuario);
-            ArgumentNullException.ThrowIfNull(mod);
+            CFUsuario? mod = await _unit.Usuarios.GetAsync(u => u.Usuario == dto.Usuario);
+            ArgumentNullException.ThrowIfNull(mod, "User not found");
             if (!hash.Compute(dto.Password, mod.Password))
                 throw new InvalidDataException("Invalid password");
-            CFSocio? soc = await repSoc.GetAsync(s => s.UsuarioId == mod.Id);
+            CFSocio? soc = await _unit.Socios.GetAsync(s => s.UsuarioId == mod.Id, ct: ct);
             IEnumerable<string>? lr = null;
             if (soc is not null)
             {
-                CFPerfil? per = await repPer.GetAsync(p => p.Id == soc.PerfilId, true);
+                CFPerfil? per = await _unit.Perfiles.GetAsync(p => p.Id == soc.PerfilId, true, ct);
                 lr = per?.Roles.Select(r => r.Rol.ToString());
             }
             string tk = help.Generar(mod.Usuario, mod.Id.ToString(), lr);

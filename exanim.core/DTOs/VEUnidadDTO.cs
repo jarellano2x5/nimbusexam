@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace exanim.core.DTOs;
 
-public record class VEUnidadDTO
+public record VEUnidadDTO
 {
-    public Guid UnidadId { get; set; }
+    public Guid? Id { get; set; }
     [Required]
     [Length(3, 15)]
     public string Placa { get; set; } = string.Empty;

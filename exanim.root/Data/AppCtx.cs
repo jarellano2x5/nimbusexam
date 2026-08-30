@@ -22,7 +22,7 @@ public class AppCtx : DbContext
     public DbSet<OPAutoriza> Autorizaciones { get; set; }
     public DbSet<OPAvance> Avances { get; set; }
     public DbSet<OPClase> Clases { get; set; }
-    public DbSet<OPEstatus> Estatus { get; set; }
+    public DbSet<OPEstado> Estatus { get; set; }
     public DbSet<OPInstalacion> Instalaciones { get; set; }
     public DbSet<OPOrden> Ordenes { get; set; }
     public DbSet<OPPaso> Pasos { get; set; }
@@ -46,7 +46,7 @@ public class AppCtx : DbContext
                 .IsUnicode(false).IsRequired();
             
             entity.HasMany<VEUnidad>()
-                .WithOne()
+                .WithOne(e => e.Marca)
                 .HasForeignKey(e => e.MarcaId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
@@ -85,7 +85,7 @@ public class AppCtx : DbContext
                 .HasForeignKey(e => e.AgenciaId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
-            entity.HasMany<OPEstatus>()
+            entity.HasMany<OPEstado>()
                 .WithOne()
                 .HasForeignKey(e => e.AgenciaId)
                 .OnDelete(DeleteBehavior.Restrict)
@@ -100,16 +100,6 @@ public class AppCtx : DbContext
                 .HasForeignKey(e => e.AgenciaId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
-        });
-
-        modelBuilder.Entity<CFConfigura>(entity =>
-        {
-            entity.HasKey(e => new { e.AgenciaId, e.ParametroId })
-                .HasName("PK_CFConfigura");
-            entity.ToTable("CFConfigura");
-
-            entity.Property(e => e.Cadena).HasMaxLength(300)
-                .IsUnicode(false).IsRequired();
         });
 
         modelBuilder.Entity<CFOperador>(entity =>
@@ -223,7 +213,7 @@ public class AppCtx : DbContext
                 .IsRequired();
         });
 
-        modelBuilder.Entity<OPEstatus>(entity =>
+        modelBuilder.Entity<OPEstado>(entity =>
         {
             entity.HasKey(e => e.Id)
                 .HasName("PK_OPEstatus");

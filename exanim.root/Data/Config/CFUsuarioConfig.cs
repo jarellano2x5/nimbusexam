@@ -61,7 +61,7 @@ public class CFUsuarioConfig : IEntityTypeConfiguration<CFUsuario>
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
         builder.HasMany<VECliente>()
-            .WithOne()
+            .WithOne(e => e.Usuario)
             .HasForeignKey(e => e.UsuarioId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();

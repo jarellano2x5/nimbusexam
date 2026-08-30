@@ -1,8 +1,8 @@
 namespace exanim.core.DTOs;
 
-public class VELineaDTO
+public record VELineaDTO
 {
-    public Guid? LineaId { get; set; }
+    public Guid? Id { get; set; }
     public string Clave { get; set; } = string.Empty;
     public string Unidad { get; set; } = string.Empty;
     public string Concepto { get; set; } = string.Empty;

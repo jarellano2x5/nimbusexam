@@ -4,7 +4,7 @@ namespace exanim.core.DTOs;
 
 public record CFAgenciaDTO
 {
-    public Guid AgenciaId { get; set; }
+    public Guid? Id { get; set; }
     [Required]
     [Length(12, 13)]
     public string RFC { get; set; } = string.Empty;

@@ -5,5 +5,5 @@ namespace exanim.core.Interfaces;
 
 public interface IUtilService
 {
-    IEnumerable<Option> GetPerfil();
+    IEnumerable<Option> GetPerfil(CancellationToken ct = default);
 }

@@ -1,23 +1,21 @@
 using exanim.core.DTOs;
 using exanim.core.Entities;
 using exanim.core.Interfaces;
-using Mapster;
-using MapsterMapper;
+using exanim.core.Storages;
 
 namespace exanim.core.Services;
 
-public class VEClienteService(IRepository<VECliente> repository, IMapper mapper) : IVEClienteService
+public class VEClienteService(IUnitOfWork unitOfWork) : IVEClienteService
 {
-    private readonly IRepository<VECliente> _repo = repository;
-    private readonly IMapper _map = mapper;
+    private readonly IUnitOfWork _unit = unitOfWork;
 
-    public async Task<VEClienteDTO> AddAsync(VEClienteDTO dto)
+    public async Task<VEClienteDTO> AddAsync(VEClienteDTO dto, CancellationToken ct = default)
     {
         try
         {
-            VECliente mod = _map.Map<VECliente>(dto);
-            mod.Id = Guid.NewGuid();
-            await _repo.InsertAsync(mod);
+            VECliente mod = dto.ToModel();
+            _unit.Clientes.InsertAsync(mod);
+            await _unit.CommitAsync(ct);
             return dto with { Id = mod.Id };
         }
         catch (Exception)
@@ -26,31 +24,15 @@ public class VEClienteService(IRepository<VECliente> repository, IMapper mapper)
         }
     }
 
-    public async Task<VEClienteDTO> AttachAsync(Guid id, VEClienteDTO dto)
+    public async Task<bool> DownAsync(Guid id, CancellationToken ct = default)
     {
         try
         {
-            VECliente? mod = await _repo.GetAsync(id);
-            if (mod is null) throw new Exception("Record not found");
-            mod.Adapt(dto);
-            await _repo.UpdateAsync(mod);
-            return dto;
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-    }
-
-    public async Task<bool> DownAsync(Guid id)
-    {
-        try
-        {
-            VECliente? mod = await _repo.GetAsync(id);
-            if (mod is null) throw new Exception("Record not found");
-            if (!mod.Activo) return false;
+            VECliente? mod = await _unit.Clientes.GetAsync(id, ct);
+            ArgumentNullException.ThrowIfNull(mod, "record not found");
             mod.Activo = false;
-            await _repo.UpdateAsync(mod);
+            _unit.Clientes.UpdateAsync(mod);
+            await _unit.CommitAsync(ct);
             return true;
         }
         catch (Exception)
@@ -59,12 +41,15 @@ public class VEClienteService(IRepository<VECliente> repository, IMapper mapper)
         }
     }
 
-    public async Task<IEnumerable<Item>> ItemsAsync(string srch)
+    public async Task<VEClienteDTO> FixAsync(Guid id, VEClienteDTO dto, CancellationToken ct = default)
     {
         try
         {
-            IEnumerable<VECliente> ls = await _repo.SearchAsync(s => 1 == 1);
-            return _map.Map<IEnumerable<Item>>(ls);
+            VECliente? mod = await _unit.Clientes.GetAsync(id, ct);
+            ArgumentNullException.ThrowIfNull(mod, "record not found");
+            _unit.Clientes.UpdateAsync(mod.ToExists(dto));
+            await _unit.CommitAsync(ct);
+            return dto;
         }
         catch (Exception)
         {
@@ -72,13 +57,27 @@ public class VEClienteService(IRepository<VECliente> repository, IMapper mapper)
         }
     }
 
-    public async Task<VEClienteDTO> PickAsync(Guid id)
+    public async Task<IEnumerable<Item>> ItemsAsync(string srch, CancellationToken ct = default)
     {
         try
         {
-            VECliente? mod = await _repo.GetAsync(id);
-            if (mod is null) throw new Exception("Record not found");
-            return _map.Map<VEClienteDTO>(mod);
+            IEnumerable<VECliente> ls = await _unit.Clientes
+                .SearchAsync(c => c.Activo == true, ct: ct);
+            return ls.Select(c => c.ToItem());
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    public async Task<VEClienteDTO> PickAsync(Guid id, CancellationToken ct = default)
+    {
+        try
+        {
+            VECliente? mod = await _unit.Clientes.GetAsync(id, ct);
+            ArgumentNullException.ThrowIfNull(mod, "record not found");
+            return mod.ToDto();
         }
         catch (Exception)
         {
