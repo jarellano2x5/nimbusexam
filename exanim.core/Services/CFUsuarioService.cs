@@ -2,63 +2,64 @@ using exanim.core.DTOs;
 using exanim.core.Entities;
 using exanim.core.Interfaces;
 using exanim.core.Storages;
-using MapsterMapper;
 
 namespace exanim.core.Services;
 
-public class CFUsuarioService : ICFUsuarioService
+public class CFUsuarioService(IUnitOfWork unitOfWork) : ICFUsuarioService
 {
-    private readonly IRepository<CFUsuario> _repo;
-    private readonly IMapper _mapper;
-
-    public CFUsuarioService(IRepository<CFUsuario> repository, IMapper mapper)
-    {
-        _repo = repository;
-        _mapper = mapper;
-    }
+    private readonly IUnitOfWork _unit = unitOfWork;
     
-    public async Task<CFUsuarioDTO> AddAsync(CFUsuarioDTO dto)
+    public async Task<CFSocioDTO> AddSocioAsync(CFSocioDTO dto, Guid idAgencia, CancellationToken ct = default)
     {
         try
         {
-            CFUsuario model = _mapper.Map<CFUsuario>(dto);
-            model.Id = Guid.NewGuid();
-            await _repo.InsertAsync(model);
-            dto.UsuarioId = model.Id;
-            return dto;
+            CFUsuario? u = await _unit.Usuarios
+                .GetAsync(u => u.Correo == dto.Correo
+                    || u.Usuario == dto.Usuario, false, ct);
+            if (u is not null) throw new ArgumentNullException(nameof(u.Correo), "record already exists");
+            CFUsuario mus = dto.ToUser();
+            _unit.Usuarios.InsertAsync(mus);
+            CFSocio mod = dto.ToModel(mus.Id, idAgencia);
+            _unit.Socios.InsertAsync(mod);
+            await _unit.CommitAsync(ct);
+            return dto with { Id = mod.Id };
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             throw;
         }
     }
 
-    public async Task<IEnumerable<CFUsuarioDTO>> AllAsync()
+    public async Task<IEnumerable<CFSocioDTO>> SociosAsync(Guid idAgencia, CancellationToken ct = default)
     {
         try
         {
-            return _mapper.Map<IEnumerable<CFUsuarioDTO>>(
-                await _repo.SearchAsync(o => 1 == 1)
-            );
+            IEnumerable<CFSocio> ls = await _unit.Socios
+                .SearchAsync(s => s.AgenciaId == idAgencia, false, true, ct);
+            return ls.Select(s => s.ToDto());
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             throw;
         }
     }
 
-    public Task<CFUsuarioDTO> AttachAsync(Guid id, CFUsuarioDTO dto)
+    public async Task<bool> RestSocioAsync(Guid id, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> DownAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<CFUsuarioDTO> PickAsync(Guid id)
-    {
-        throw new NotImplementedException();
+        try
+        {
+            CFSocio? mod = await _unit.Socios.GetAsync(id, ct);
+            ArgumentNullException.ThrowIfNull(mod, "record not found");
+            _unit.Socios.DeleteAsync(mod);
+            await _unit.CommitAsync(ct);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }

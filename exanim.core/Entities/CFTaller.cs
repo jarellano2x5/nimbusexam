@@ -22,7 +22,7 @@ public static class TallerExtensions
 
     extension(CFTallerDTO d)
     {
-        public CFTaller ToModel() => new()
+        public CFTaller ToModel(Guid idAgencia) => new()
         {
             Id = Guid.NewGuid(),
             Codigo = d.Codigo,
@@ -30,11 +30,11 @@ public static class TallerExtensions
             Direccion = d.Direccion,
             Lugar = d.Lugar,
             Activo = d.Activo,
-            AgenciaId = d.Agencia.Id,
+            AgenciaId = idAgencia,
             UsuarioId = d.Usuario.Id
         };
 
-        public CFTaller ToPatch() => new()
+        public CFTaller ToPatch(Guid idAgencia) => new()
         {
             Id = d.Id!.Value,
             Codigo = d.Codigo,
@@ -42,7 +42,7 @@ public static class TallerExtensions
             Direccion = d.Direccion,
             Lugar = d.Lugar,
             Activo = d.Activo,
-            AgenciaId = d.Agencia.Id,
+            AgenciaId = idAgencia,
             UsuarioId = d.Usuario.Id
         };
     }

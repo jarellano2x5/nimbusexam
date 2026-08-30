@@ -22,7 +22,7 @@ public class BrandService(IUnitOfWork unitOfWork) : IBrandService
         }
     }
 
-    public async Task<int> AddsAsync(IEnumerable<BrandDTO> dtos, CancellationToken ct = default)
+    public async Task<int> AddsAsync(Guid? id, IEnumerable<BrandDTO> dtos, CancellationToken ct = default)
     {
         try
         {

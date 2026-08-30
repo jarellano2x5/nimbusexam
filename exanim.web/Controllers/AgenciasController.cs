@@ -34,13 +34,13 @@ public class AgenciasController(ICFAgenciaService service) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<CFAgenciaDTO>> Put(Guid id, [FromBody] CFAgenciaDTO dto)
+    public async Task<ActionResult<CFAgenciaDTO>> Put(Guid id, [FromBody] CFAgenciaDTO dto, CancellationToken kt = default)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        return await _logic.AttachAsync(id, dto);
+        return await _logic.FixAsync(id, dto, kt);
     }
 
     [HttpDelete("{id}")]

@@ -17,35 +17,19 @@ public class MarcasController(IBrandService service) : ControllerBase
         return await _logic.ItemsAsync(criterio);
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<BrandDTO>> Get(Guid id)
-    {
-        return await _logic.PickAsync(id);
-    }
-
     [HttpPost]
-    public async Task<ActionResult<BrandDTO>> Post([FromBody] BrandDTO dto)
+    public async Task<ActionResult<int>> Post([FromBody] IEnumerable<BrandDTO> dtos, CancellationToken kt = default)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        return await _logic.AddAsync(dto);
+        return await _logic.AddsAsync(null, dtos, kt);
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<BrandDTO>> Put(Guid id, [FromBody] BrandDTO dto)
+    [HttpDelete("{ids}")]
+    public async Task<ActionResult<bool>> Delete(Guid[] ids, CancellationToken kt = default)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        return await _logic.AttachAsync(id, dto);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<bool>> Delete(Guid id)
-    {
-        return await _logic.DownAsync(id);
+        return await _logic.DownsAsync(ids, kt);
     }
 }

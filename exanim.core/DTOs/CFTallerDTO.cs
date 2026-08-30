@@ -19,6 +19,5 @@ public record CFTallerDTO
     public Location Lugar { get; set; } = null!;
     [Required]
     public bool Activo { get; set; }
-    public Item Agencia { get; set; } = null!;
     public Item Usuario { get; set; } = null!;
 }

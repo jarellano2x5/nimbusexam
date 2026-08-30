@@ -9,7 +9,7 @@ public class CFConfiguraService(IUnitOfWork unitOfWork) : ICFConfiguraService
 {
     private readonly IUnitOfWork _unit = unitOfWork;
 
-    public async Task<int> AddsAsync(IEnumerable<CFConfiguraDTO> dtos, CancellationToken ct = default)
+    public async Task<int> AddsAsync(Guid? id, IEnumerable<CFConfiguraDTO> dtos, CancellationToken ct = default)
     {
         try
         {

@@ -11,9 +11,9 @@ public class UsuariosController(ICFUsuarioService service) : ControllerBase
 {
     private readonly ICFUsuarioService _logic = service;
 
-    [HttpGet]
-    public async Task<IEnumerable<CFUsuarioDTO>> Get()
+    [HttpGet("[action]/{idagencia}")]
+    public async Task<IEnumerable<CFSocioDTO>> GetSocios(Guid idagencia)
     {
-        return await _logic.AllAsync();
+        return await _logic.SociosAsync(idagencia);
     }
 }

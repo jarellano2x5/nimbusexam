@@ -1,23 +1,17 @@
 using exanim.core.DTOs;
 using exanim.core.Enums;
 using exanim.core.Interfaces;
-using MapsterMapper;
 
 namespace exanim.core.Services;
 
-public class UtilService(IMapper mapper) : IUtilService
+public class UtilService : IUtilService
 {
-    private readonly IMapper _map = mapper;
-
-    public IEnumerable<Option> GetPerfil()
+    public IEnumerable<Option> GetRol()
     {
         IEnumerable<Option> ls = Enum.GetValues(typeof(RolEnum))
             .Cast<RolEnum>()
-            .Select(e => new Option
-            {
-                Id = (byte)e,
-                Name = e.ToString()
-            });
+            .Select(e =>
+                new Option((byte)e, e.ToString()));
         return ls;
     }
 }

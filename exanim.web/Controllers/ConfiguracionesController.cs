@@ -18,12 +18,12 @@ public class ConfiguracionesController(ICFConfiguraService service) : Controller
     }
 
     [HttpPost]
-    public async Task<ActionResult<CFConfiguraDTO>> Post([FromBody] CFConfiguraDTO dto)
+    public async Task<ActionResult<int>> Post([FromBody] IEnumerable<CFConfiguraDTO> dtos)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        return await _logic.AddAsync(dto);
+        return await _logic.AddsAsync(null, dtos);
     }
 }

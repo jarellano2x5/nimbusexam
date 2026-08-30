@@ -14,7 +14,7 @@ public class PerfilesController(ICFPerfilService service) : ControllerBase
     [HttpGet]
     public async Task<IEnumerable<Item>> Get()
     {
-        return await _logic.ItemsAsync("");
+        return await _logic.ItemsAsync(Guid.NewGuid(), "");
     }
 
     [HttpGet("{id}")]
@@ -33,13 +33,9 @@ public class PerfilesController(ICFPerfilService service) : ControllerBase
         return await _logic.AddAsync(dto);
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<CFPerfilDTO>> Put(Guid id, [FromBody] CFPerfilDTO dto)
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<bool>> Delete(Guid id)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        return await _logic.AttachAsync(id, dto);
+        return await _logic.DownAsync(id);
     }
 }

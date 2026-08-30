@@ -17,7 +17,7 @@ public class VEClienteConfig : IEntityTypeConfiguration<VECliente>
 
         builder.HasMany<OPOrden>()
             .WithOne()
-            .HasForeignKey(e => e.GestorId)
+            .HasForeignKey(e => e.ClienteId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
     }

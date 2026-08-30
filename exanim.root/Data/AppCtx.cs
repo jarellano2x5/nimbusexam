@@ -18,6 +18,7 @@ public class AppCtx : DbContext
     public DbSet<CFPerfil> Perfiles { get; set; }
     public DbSet<CFTaller> Talleres { get; set; }
     public DbSet<CFUsuario> Usuarios { get; set; }
+    public DbSet<CFSocio> Socios { get; set; }
     public DbSet<OPAccion> Acciones { get; set; }
     public DbSet<OPAutoriza> Autorizaciones { get; set; }
     public DbSet<OPAvance> Avances { get; set; }
@@ -48,56 +49,6 @@ public class AppCtx : DbContext
             entity.HasMany<VEUnidad>()
                 .WithOne(e => e.Marca)
                 .HasForeignKey(e => e.MarcaId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-        });
-
-        modelBuilder.Entity<CFAgencia>(entity =>
-        {
-            entity.HasKey(e => e.Id)
-                .HasName("PK_CFAgencia");
-            entity.ToTable("CFAgencia");
-
-            entity.Property(e => e.RFC).HasMaxLength(13)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.RazonSocial).HasMaxLength(150)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Nombre).HasMaxLength(50)
-                .IsUnicode(false).IsRequired();
-
-            entity.HasMany<CFConfigura>()
-                .WithOne()
-                .HasForeignKey(e => e.AgenciaId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<CFOperador>()
-                .WithOne()
-                .HasForeignKey(e => e.AgenciaId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<CFTaller>()
-                .WithOne()
-                .HasForeignKey(e => e.AgenciaId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<OPClase>()
-                .WithOne()
-                .HasForeignKey(e => e.AgenciaId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<OPEstado>()
-                .WithOne()
-                .HasForeignKey(e => e.AgenciaId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<OPPieza>()
-                .WithOne()
-                .HasForeignKey(e => e.AgenciaId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<VECotizacion>()
-                .WithOne()
-                .HasForeignKey(e => e.AgenciaId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
         });
@@ -213,39 +164,6 @@ public class AppCtx : DbContext
                 .IsRequired();
         });
 
-        modelBuilder.Entity<OPEstado>(entity =>
-        {
-            entity.HasKey(e => e.Id)
-                .HasName("PK_OPEstatus");
-            entity.ToTable("OPEstatus");
-
-            entity.Property(e => e.Nombre).HasMaxLength(30)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Code).HasMaxLength(15)
-                .IsUnicode(false).IsRequired();
-
-            entity.HasMany<OPAvance>()
-                .WithOne()
-                .HasForeignKey(e => e.EstatusId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<OPOrden>()
-                .WithOne()
-                .HasForeignKey(e => e.EstatusId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<OPPaso>()
-                .WithOne()
-                .HasForeignKey(e => e.PrevioId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-            entity.HasMany<OPPaso>()
-                .WithOne()
-                .HasForeignKey(e => e.AvanzaId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-        });
-
         modelBuilder.Entity<OPInstalacion>(entity =>
         {
             entity.HasKey(e => e.Id)
@@ -267,14 +185,16 @@ public class AppCtx : DbContext
                 .HasName("PK_OPOrden");
             entity.ToTable("OPOrden");
 
-            entity.Property(e => e.Fecha).HasColumnType("datetime");
+            entity.Property(e => e.Fecha)
+                .HasColumnType(Dbtas.Tdatetime);
             entity.Property(e => e.Problema).HasMaxLength(500)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Condicion).HasMaxLength(500)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Correo).HasMaxLength(120)
                 .IsUnicode(false);
-            entity.Property(e => e.FechaEntrega).HasColumnType("datetime");
+            entity.Property(e => e.Condicion).HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.Correo).HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.FechaEntrega)
+                .HasColumnType(Dbtas.Tdate);
 
             entity.HasMany<OPAvance>()
                 .WithOne()

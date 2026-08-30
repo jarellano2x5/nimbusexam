@@ -22,7 +22,7 @@ public class VEUnidadConfig : IEntityTypeConfiguration<VEUnidad>
         builder.Property(e => e.Registrado).HasColumnType("datetime");
 
         builder.HasMany<OPOrden>()
-            .WithOne()
+            .WithOne(e => e.Unidad)
             .HasForeignKey(e => e.UnidadId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();

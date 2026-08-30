@@ -34,12 +34,12 @@ public class VehiculosController(IVEUnidadService service) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<VEUnidadDTO>> Put(Guid id, [FromBody] VEUnidadDTO dto)
+    public async Task<ActionResult<VEUnidadDTO>> Put(Guid id, [FromBody] VEUnidadDTO dto, CancellationToken kt = default)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        return await _logic.AttachAsync(id, dto);
+        return await _logic.FixAsync(id, dto, kt);
     }
 }

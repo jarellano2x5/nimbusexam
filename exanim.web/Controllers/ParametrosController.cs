@@ -17,29 +17,19 @@ public class ParametrosController(ICFParametroService service) : ControllerBase
         return await _logic.ItemsAsync("");
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<CFParametroDTO>> Get(Guid id)
-    {
-        return await _logic.PickAsync(id);
-    }
-
     [HttpPost]
-    public async Task<ActionResult<CFParametroDTO>> Post([FromBody] CFParametroDTO dto)
+    public async Task<ActionResult<int>> Post([FromBody] IEnumerable<CFParametroDTO> dtos)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        return await _logic.AddAsync(dto);
+        return await _logic.AddsAsync(null, dtos);
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<CFParametroDTO>> Put(Guid id, [FromBody] CFParametroDTO dto)
+    [HttpDelete("{ids}")]
+    public async Task<ActionResult<bool>> Delete(Guid[] ids)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        return await _logic.AttachAsync(id, dto);
+        return await _logic.DownsAsync(ids);
     }
 }

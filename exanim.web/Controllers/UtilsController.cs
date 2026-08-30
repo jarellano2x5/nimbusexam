@@ -12,9 +12,9 @@ public class UtilsController(IUtilService service) : ControllerBase
     private readonly IUtilService _logic = service;
 
     [HttpGet("[action]")]
-    public IEnumerable<Option> GetPerfil()
+    public IEnumerable<Option> GetRol()
     {
-        return _logic.GetPerfil();
+        return _logic.GetRol();
     }
 
 }

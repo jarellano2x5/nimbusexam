@@ -9,7 +9,7 @@ public class CFTallerService(IUnitOfWork unitOfWork) : ICFTallerService
 {
     private readonly IUnitOfWork _unit = unitOfWork;
 
-    public async Task<int> AddsAsync(IEnumerable<CFTallerDTO> dtos, CancellationToken ct = default)
+    public async Task<int> AddsAsync(Guid? id, IEnumerable<CFTallerDTO> dtos, CancellationToken ct = default)
     {
         int t = dtos.Count();
         ArgumentOutOfRangeException.ThrowIfZero(t, "no records");
@@ -20,11 +20,11 @@ public class CFTallerService(IUnitOfWork unitOfWork) : ICFTallerService
             Guid[] r = [.. lu.Select(t => t.Id!.Value)];
             int c = await _unit.Talleres.HasAsync(r, ct);
             ArgumentOutOfRangeException.ThrowIfNotEqual(r.Length, c);
-            _unit.Talleres.AttachAsync(lu.Select(t => t.ToPatch()));
+            _unit.Talleres.AttachAsync(lu.Select(t => t.ToPatch(id!.Value)));
         }
         if (li.Any())
         {
-            _unit.Talleres.AddsAsync(li.Select(t => t.ToModel()));
+            _unit.Talleres.AddsAsync(li.Select(t => t.ToModel(id!.Value)));
         }
         await _unit.CommitAsync(ct);
         return t;

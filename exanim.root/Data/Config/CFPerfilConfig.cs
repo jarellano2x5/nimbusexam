@@ -20,5 +20,9 @@ public class CFPerfilConfig : IEntityTypeConfiguration<CFPerfil>
             .HasForeignKey(e => e.PerfilId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
+        builder.HasMany<CFSocio>()
+            .WithOne(e => e.Perfil)
+            .HasForeignKey(e => e.PerfilId)
+            .IsRequired();
     }
 }

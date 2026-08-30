@@ -11,35 +11,25 @@ public class TalleresController(ICFTallerService service) : ControllerBase
 {
     private readonly ICFTallerService _logic = service;
 
-    [HttpGet]
-    public async Task<IEnumerable<Item>> Get()
+    [HttpGet("[action]/{idagencia}")]
+    public async Task<IEnumerable<Item>> GetItems(Guid idagencia, CancellationToken kt = default)
     {
-        return await _logic.ItemsAsync("");
+        return await _logic.ItemsAsync(idagencia, "", kt);
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<CFTallerDTO>> Get(Guid id)
-    {
-        return await _logic.PickAsync(id);
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<CFTallerDTO>> Post([FromBody] CFTallerDTO dto)
+    [HttpPost("{idagencia}")]
+    public async Task<ActionResult<int>> Post(Guid idagencia, [FromBody] IEnumerable<CFTallerDTO> dtos, CancellationToken kt = default)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        return await _logic.AddAsync(dto);
+        return await _logic.AddsAsync(idagencia, dtos, kt);
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<CFTallerDTO>> Put(Guid id, [FromBody] CFTallerDTO dto)
+    [HttpDelete("{ids}")]
+    public async Task<ActionResult<bool>> Put(Guid[] ids, CancellationToken kt = default)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        return await _logic.AttachAsync(id, dto);
+        return await _logic.DownsAsync(ids, kt);
     }
 }

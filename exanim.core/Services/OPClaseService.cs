@@ -2,81 +2,83 @@ using exanim.core.DTOs;
 using exanim.core.Entities;
 using exanim.core.Interfaces;
 using exanim.core.Storages;
-using Mapster;
-using MapsterMapper;
 
 namespace exanim.core.Services;
 
-public class OPClaseService(IRepository<OPClase> repository, IRepository<CFAgencia> agenRepository, IMapper mapper) : IOPClaseService
+public class OPClaseService(IUnitOfWork unitOfWork) : IOPClaseService
 {
-    private readonly IRepository<OPClase> _repo = repository;
-    private readonly IRepository<CFAgencia> _agenRepo = agenRepository;
-    private readonly IMapper _map = mapper;
-
-    public async Task<OPClaseDTO> AddAsync(OPClaseDTO dto)
+    private readonly IUnitOfWork _unit = unitOfWork;
+    
+    public async Task<int> AddsAsync(Guid? id, IEnumerable<OPClaseDTO> dtos, CancellationToken ct = default)
     {
         try
         {
-            OPClase mod = _map.Map<OPClase>(dto);
-            mod.Id = Guid.NewGuid();
-            await _repo.InsertAsync(mod);
-            return dto with { ClaseId = mod.Id };
+            IEnumerable<OPClaseDTO> li = dtos.Where(c => c.Id == null);
+            IEnumerable<OPClaseDTO> lu = dtos.Where(c => c.Id != null);
+            if (lu.Any())
+            {
+                Guid[] ids = [.. lu.Select(c => c.Id!.Value)];
+                int xi = await _unit.Clases.HasAsync(ids, ct);
+                ArgumentOutOfRangeException.ThrowIfNotEqual(ids.Length, xi);
+                IEnumerable<OPClase> ls = await _unit.Clases
+                    .SearchAsync(c => ids.Contains(c.Id), ct: ct);
+                foreach (OPClase c in ls)
+                {
+                    OPClaseDTO d = lu.First(d => d.Id == c.Id);
+                    _unit.Clases.UpdateAsync(c.ToExists(d));
+                }
+            }
+
+            if (li.Any())
+            {
+                foreach (OPClaseDTO d in li)
+                    _unit.Clases.InsertAsync(d.ToModel(id!.Value));
+            }
+
+            await _unit.CommitAsync(ct);
+            return dtos.Count();
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             throw;
         }
     }
 
-    public async Task<OPClaseDTO> AttachAsync(Guid id, OPClaseDTO dto)
+    public async Task<bool> DownsAsync(Guid[] ids, CancellationToken ct = default)
     {
         try
         {
-            OPClase? mod = await _repo.GetAsync(id);
-            if (mod is null) throw new Exception("Record not found");
-            mod.Adapt(dto);
-            await _repo.UpdateAsync(mod);
-            return dto;
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-    }
-
-    public async Task<bool> DownAsync(Guid id)
-    {
-        try
-        {
-            OPClase? mod = await _repo.GetAsync(id);
-            if (mod is null) return false;
-            mod.Activo = false;
-            await _repo.UpdateAsync(mod);
+            int qn = await _unit.Clases.HasAsync(ids, ct);
+            ArgumentOutOfRangeException.ThrowIfNotEqual(ids.Length, qn);
+            IEnumerable<OPClase> ld = await _unit.Clases
+                .SearchAsync(c => ids.Contains(c.Id), ct: ct);
+            foreach (OPClase c in ld)
+            {
+                c.Activo = false;
+                _unit.Clases.UpdateAsync(c);
+            }
+            await _unit.CommitAsync(ct);
             return true;
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             throw;
         }
     }
 
-    public Task<IEnumerable<Item>> ItemsAsync(string srch)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<OPClaseDTO> PickAsync(Guid id)
+    public async Task<IEnumerable<Item>> ItemsAsync(Guid id, string srch, CancellationToken ct = default)
     {
         try
         {
-            OPClase? mod = await _repo.GetAsync(c => c.Id == id);
-            if (mod is null) throw new Exception("Record not found");
-            OPClaseDTO dto = _map.Map<OPClaseDTO>(mod);
-            dto.Agencia = _map.Map<Item>(await _agenRepo.GetAsync(mod.AgenciaId));
-            return dto;
+            IEnumerable<OPClase> ls = await _unit.Clases
+                .SearchAsync(c => c.AgenciaId == id && c.Activo == true, ct: ct);
+            return ls.Select(c => c.ToItem());
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             throw;
         }
     }

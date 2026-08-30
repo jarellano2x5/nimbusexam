@@ -22,7 +22,7 @@ public class CFUsuarioConfig : IEntityTypeConfiguration<CFUsuario>
             .IsUnicode(false);
 
         builder.HasMany(e => e.Socios)
-            .WithOne()
+            .WithOne(e => e.Usuario)
             .HasForeignKey(e => e.UsuarioId)
             .IsRequired();
         builder.HasMany<CFAgencia>()
