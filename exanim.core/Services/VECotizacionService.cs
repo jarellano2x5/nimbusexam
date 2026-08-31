@@ -9,7 +9,7 @@ public class VECotizacionService(IUnitOfWork unitOfWork) : IVECotizacionService
 {
     private readonly IUnitOfWork _unit = unitOfWork;
 
-    public Task<VECotizacionDTO> AddAsync(VECotizacionDTO dto, CancellationToken ct = default)
+    public Task<VECotizacionDTO> AddAsync(AuthMe me, VECotizacionDTO dto, CancellationToken ct = default)
     {
         throw new NotImplementedException();
     }
@@ -19,12 +19,12 @@ public class VECotizacionService(IUnitOfWork unitOfWork) : IVECotizacionService
         throw new NotImplementedException();
     }
 
-    public Task<VECotizacionDTO> FixAsync(Guid id, VECotizacionDTO dto, CancellationToken ct = default)
+    public Task<VECotizacionDTO> FixAsync(AuthMe me, Guid id, VECotizacionDTO dto, CancellationToken ct = default)
     {
         throw new NotImplementedException();
     }
 
-    public Task<DPage<VECotizacionMinDTO>> PageAsync(DateTime date, Guid stage, int size = 15, int page = 0, CancellationToken ct = default)
+    public Task<DPage<VECotizacionMinDTO>> PageAsync(AuthMe me, DateTime date, Guid stage, int size = 15, int page = 0, CancellationToken ct = default)
     {
         throw new NotImplementedException();
     }

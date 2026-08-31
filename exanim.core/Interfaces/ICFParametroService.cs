@@ -2,7 +2,7 @@ using exanim.core.DTOs;
 
 namespace exanim.core.Interfaces;
 
-public interface ICFParametroService : IChunk<CFParametroDTO>, ICatalog
+public interface ICFParametroService : IBulk<CFParametroDTO>, ICatalog
 {
 
 }

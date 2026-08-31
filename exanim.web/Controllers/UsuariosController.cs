@@ -12,8 +12,8 @@ public class UsuariosController(ICFUsuarioService service) : ControllerBase
     private readonly ICFUsuarioService _logic = service;
 
     [HttpGet("[action]/{idagencia}")]
-    public async Task<IEnumerable<CFSocioDTO>> GetSocios(Guid idagencia)
+    public async Task<IEnumerable<CFSocioDTO>> GetSocios(Guid idagencia, CancellationToken kt)
     {
-        return await _logic.SociosAsync(idagencia);
+        return await _logic.SociosAsync(idagencia, kt);
     }
 }

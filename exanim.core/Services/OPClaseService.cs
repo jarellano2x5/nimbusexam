@@ -9,7 +9,7 @@ public class OPClaseService(IUnitOfWork unitOfWork) : IOPClaseService
 {
     private readonly IUnitOfWork _unit = unitOfWork;
     
-    public async Task<int> AddsAsync(Guid? id, IEnumerable<OPClaseDTO> dtos, CancellationToken ct = default)
+    public async Task<int> AddsAsync(AuthMe me, IEnumerable<OPClaseDTO> dtos, CancellationToken ct = default)
     {
         try
         {
@@ -32,7 +32,7 @@ public class OPClaseService(IUnitOfWork unitOfWork) : IOPClaseService
             if (li.Any())
             {
                 foreach (OPClaseDTO d in li)
-                    _unit.Clases.InsertAsync(d.ToModel(id!.Value));
+                    _unit.Clases.InsertAsync(d.ToModel(me.IdAgen!.Value));
             }
 
             await _unit.CommitAsync(ct);
@@ -68,12 +68,12 @@ public class OPClaseService(IUnitOfWork unitOfWork) : IOPClaseService
         }
     }
 
-    public async Task<IEnumerable<Item>> ItemsAsync(Guid id, string srch, CancellationToken ct = default)
+    public async Task<IEnumerable<Item>> ItemsAsync(AuthMe me, string srch, CancellationToken ct = default)
     {
         try
         {
             IEnumerable<OPClase> ls = await _unit.Clases
-                .SearchAsync(c => c.AgenciaId == id && c.Activo == true, ct: ct);
+                .SearchAsync(c => c.AgenciaId == me.IdAgen && c.Activo == true, ct: ct);
             return ls.Select(c => c.ToItem());
         }
         catch (Exception e)

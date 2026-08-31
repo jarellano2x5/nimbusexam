@@ -10,7 +10,7 @@ public class CFPerfilService(IUnitOfWork unitOfWork) : ICFPerfilService
 {
     private readonly IUnitOfWork _unit = unitOfWork;
 
-    public async Task<CFPerfilDTO> AddAsync(CFPerfilDTO dto, CancellationToken ct = default)
+    public async Task<CFPerfilDTO> AddAsync(AuthMe me, CFPerfilDTO dto, CancellationToken ct = default)
     {
         try
         {
@@ -43,7 +43,7 @@ public class CFPerfilService(IUnitOfWork unitOfWork) : ICFPerfilService
         }
     }
 
-    public async Task<CFPerfilDTO> FixAsync(Guid id, CFPerfilDTO dto, CancellationToken ct = default)
+    public async Task<CFPerfilDTO> FixAsync(AuthMe me, Guid id, CFPerfilDTO dto, CancellationToken ct = default)
     {
         try
         {
@@ -60,12 +60,12 @@ public class CFPerfilService(IUnitOfWork unitOfWork) : ICFPerfilService
         }
     }
 
-    public async Task<IEnumerable<Item>> ItemsAsync(Guid id, string srch, CancellationToken ct = default)
+    public async Task<IEnumerable<Item>> ItemsAsync(AuthMe me, string srch, CancellationToken ct = default)
     {
         try
         {
             IEnumerable<CFPerfil> ls = await _unit.Perfiles
-                .SearchAsync(p => p.AgenciaId == id && p.Activo == true, ct: ct);
+                .SearchAsync(p => p.AgenciaId == me.IdAgen && p.Activo == true, ct: ct);
             return ls.Select(p => p.ToItem());
         }
         catch (Exception)

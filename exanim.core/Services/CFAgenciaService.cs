@@ -9,7 +9,7 @@ public class CFAgenciaService(IUnitOfWork unitOfWork) : ICFAgenciaService
 {
     private readonly IUnitOfWork _unit = unitOfWork;
 
-    public async Task<CFAgenciaDTO> AddAsync(CFAgenciaDTO dto, CancellationToken ct = default)
+    public async Task<CFAgenciaDTO> AddAsync(AuthMe me, CFAgenciaDTO dto, CancellationToken ct = default)
     {
         try
         {
@@ -24,7 +24,7 @@ public class CFAgenciaService(IUnitOfWork unitOfWork) : ICFAgenciaService
         }
     }
 
-    public async Task<CFAgenciaDTO> FixAsync(Guid id, CFAgenciaDTO dto, CancellationToken ct = default)
+    public async Task<CFAgenciaDTO> FixAsync(AuthMe me, Guid id, CFAgenciaDTO dto, CancellationToken ct = default)
     {
         try
         {
@@ -57,7 +57,7 @@ public class CFAgenciaService(IUnitOfWork unitOfWork) : ICFAgenciaService
         }
     }
 
-    public async Task<IEnumerable<Item>> ItemsAsync(string srch, CancellationToken ct = default)
+    public async Task<IEnumerable<Item>> ItemsAsync(AuthMe me, string srch, CancellationToken ct = default)
     {
         try
         {

@@ -9,7 +9,7 @@ public class VEClienteService(IUnitOfWork unitOfWork) : IVEClienteService
 {
     private readonly IUnitOfWork _unit = unitOfWork;
 
-    public async Task<VEClienteDTO> AddAsync(VEClienteDTO dto, CancellationToken ct = default)
+    public async Task<VEClienteDTO> AddAsync(AuthMe me, VEClienteDTO dto, CancellationToken ct = default)
     {
         try
         {
@@ -41,7 +41,7 @@ public class VEClienteService(IUnitOfWork unitOfWork) : IVEClienteService
         }
     }
 
-    public async Task<VEClienteDTO> FixAsync(Guid id, VEClienteDTO dto, CancellationToken ct = default)
+    public async Task<VEClienteDTO> FixAsync(AuthMe me, Guid id, VEClienteDTO dto, CancellationToken ct = default)
     {
         try
         {
@@ -57,7 +57,7 @@ public class VEClienteService(IUnitOfWork unitOfWork) : IVEClienteService
         }
     }
 
-    public async Task<IEnumerable<Item>> ItemsAsync(string srch, CancellationToken ct = default)
+    public async Task<IEnumerable<Item>> ItemsAsync(AuthMe me, string srch, CancellationToken ct = default)
     {
         try
         {

@@ -33,14 +33,13 @@ public sealed class TokenHelper : ITokenHelper
         };
     }
 
-    public string Generar(string usuario, string identificador, IEnumerable<string>? prfs = null)
+    public string Generar(string identificador, string tenant, IEnumerable<string>? prfs = null)
     {
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.NameId, identificador),
-            new(JwtRegisteredClaimNames.Name, usuario),
+            new(JwtRegisteredClaimNames.FamilyName, tenant),
             new(ClaimTypes.Role, "user"),
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()
                 , ClaimValueTypes.Integer64)
         };

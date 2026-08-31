@@ -2,7 +2,7 @@ using exanim.core.DTOs;
 
 namespace exanim.core.Interfaces;
 
-public interface IVEUnidadService : IService<VEUnidadDTO>, ICatalog
+public interface IVEUnidadService : IBasal<VEUnidadDTO>, ICatalog
 {
     
 }

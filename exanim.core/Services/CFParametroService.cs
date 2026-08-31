@@ -9,7 +9,7 @@ public class CFParametroService(IUnitOfWork unitOfWork) : ICFParametroService
 {
     private readonly IUnitOfWork _unit = unitOfWork;
 
-    public async Task<int> AddsAsync(Guid? id, IEnumerable<CFParametroDTO> dtos, CancellationToken ct = default)
+    public async Task<int> AddsAsync(AuthMe me, IEnumerable<CFParametroDTO> dtos, CancellationToken ct = default)
     {
         try
         {
@@ -62,7 +62,7 @@ public class CFParametroService(IUnitOfWork unitOfWork) : ICFParametroService
         }
     }
 
-    public async Task<IEnumerable<Item>> ItemsAsync(string srch, CancellationToken ct = default)
+    public async Task<IEnumerable<Item>> ItemsAsync(AuthMe me, string srch, CancellationToken ct = default)
     {
         try
         {

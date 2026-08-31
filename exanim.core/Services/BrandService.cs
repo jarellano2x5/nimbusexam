@@ -8,7 +8,7 @@ namespace exanim.core.Services;
 public class BrandService(IUnitOfWork unitOfWork) : IBrandService
 {
     private readonly IUnitOfWork _unit = unitOfWork;
-    public async Task<IEnumerable<Item>> ItemsAsync(string srch, CancellationToken ct = default)
+    public async Task<IEnumerable<Item>> ItemsAsync(AuthMe me, string srch, CancellationToken ct = default)
     {
         try
         {
@@ -22,7 +22,7 @@ public class BrandService(IUnitOfWork unitOfWork) : IBrandService
         }
     }
 
-    public async Task<int> AddsAsync(Guid? id, IEnumerable<BrandDTO> dtos, CancellationToken ct = default)
+    public async Task<int> AddsAsync(AuthMe me, IEnumerable<BrandDTO> dtos, CancellationToken ct = default)
     {
         try
         {

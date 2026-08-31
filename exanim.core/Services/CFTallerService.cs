@@ -9,7 +9,7 @@ public class CFTallerService(IUnitOfWork unitOfWork) : ICFTallerService
 {
     private readonly IUnitOfWork _unit = unitOfWork;
 
-    public async Task<int> AddsAsync(Guid? id, IEnumerable<CFTallerDTO> dtos, CancellationToken ct = default)
+    public async Task<int> AddsAsync(AuthMe me, IEnumerable<CFTallerDTO> dtos, CancellationToken ct = default)
     {
         int t = dtos.Count();
         ArgumentOutOfRangeException.ThrowIfZero(t, "no records");
@@ -21,11 +21,11 @@ public class CFTallerService(IUnitOfWork unitOfWork) : ICFTallerService
             int c = await _unit.Talleres.HasAsync(r, ct);
             ArgumentOutOfRangeException.ThrowIfNotEqual(r.Length, c);
             foreach (var ta in lu)
-                _unit.Talleres.UpdateAsync(ta.ToPatch(id!.Value));
+                _unit.Talleres.UpdateAsync(ta.ToPatch(me.IdAgen!.Value));
         }
         if (li.Any())
         {
-            _unit.Talleres.BulkAsync(li.Select(t => t.ToModel(id!.Value)));
+            _unit.Talleres.BulkAsync(li.Select(t => t.ToModel(me.IdAgen!.Value)));
         }
         await _unit.CommitAsync(ct);
         return t;
@@ -53,12 +53,12 @@ public class CFTallerService(IUnitOfWork unitOfWork) : ICFTallerService
         }
     }
 
-    public async Task<IEnumerable<Item>> ItemsAsync(Guid id, string srch, CancellationToken ct = default)
+    public async Task<IEnumerable<Item>> ItemsAsync(AuthMe me, string srch, CancellationToken ct = default)
     {
         try
         {
             IEnumerable<CFTaller> ls = await _unit.Talleres
-                .SearchAsync(t => t.AgenciaId == id && t.Activo == true, ct: ct);
+                .SearchAsync(t => t.AgenciaId == me.IdAgen && t.Activo == true, ct: ct);
             return ls.Select(t => t.ToItem());
         }
         catch (Exception)

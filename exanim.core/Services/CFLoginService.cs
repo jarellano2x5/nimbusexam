@@ -21,7 +21,7 @@ public class CFLoginService(
             CFUsuario mod = dto.ToModel(hash.Create(dto.Password));
             _unit.Usuarios.InsertAsync(mod);
             await _unit.CommitAsync(ct);
-            string tk = help.Generar(mod.Usuario, mod.Id.ToString(), null);
+            string tk = help.Generar(mod.Id.ToString(), "", null);
             return new CFSignedDTO(mod.Usuario, mod.EsTitular, null, tk);
         }
         catch (Exception e)
@@ -46,7 +46,7 @@ public class CFLoginService(
                 CFPerfil? per = await _unit.Perfiles.GetAsync(p => p.Id == soc.PerfilId, true, ct);
                 lr = per?.Roles.Select(r => r.Rol.ToString());
             }
-            string tk = help.Generar(mod.Usuario, mod.Id.ToString(), lr);
+            string tk = help.Generar(mod.Id.ToString(), "", lr);
             return new CFSignedDTO(mod.Usuario, mod.EsTitular, soc?.AgenciaId, tk);
         }
         catch (Exception e)

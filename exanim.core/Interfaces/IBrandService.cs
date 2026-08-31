@@ -2,7 +2,7 @@ using exanim.core.DTOs;
 
 namespace exanim.core.Interfaces;
 
-public interface IBrandService : ICatalog, IChunk<BrandDTO>
+public interface IBrandService : ICatalog, IBulk<BrandDTO>
 {
 
 }

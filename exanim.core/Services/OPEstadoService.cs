@@ -9,7 +9,7 @@ public class OPEstadoService(IUnitOfWork unitOfWork) : IOPEstadoService
 {
     private readonly IUnitOfWork _unit = unitOfWork;
 
-    public async Task<int> AddsAsync(Guid? id, IEnumerable<OPEstadoDTO> dtos, CancellationToken ct = default)
+    public async Task<int> AddsAsync(AuthMe me, IEnumerable<OPEstadoDTO> dtos, CancellationToken ct = default)
     {
         try
         {
@@ -23,14 +23,14 @@ public class OPEstadoService(IUnitOfWork unitOfWork) : IOPEstadoService
                 IEnumerable<OPEstado> ls = await _unit.Estados
                     .SearchAsync(e => r.Contains(e.Id), ct: ct);
                 IEnumerable<OPEstado> le = ls.Join(lu, m => m.Id, d => d.Id,
-                    (m, d) => m.ToExists(d, id!.Value));
+                    (m, d) => m.ToExists(d, me.IdAgen!.Value));
                 foreach (OPEstado e in le)
                     _unit.Estados.UpdateAsync(e);
             }
             if (li.Any())
             {
                 foreach (OPEstadoDTO e in li)
-                    _unit.Estados.InsertAsync(e.ToModel(id!.Value));
+                    _unit.Estados.InsertAsync(e.ToModel(me.IdAgen!.Value));
             }
             await _unit.CommitAsync(ct);
             return dtos.Count();
@@ -63,12 +63,12 @@ public class OPEstadoService(IUnitOfWork unitOfWork) : IOPEstadoService
         }
     }
 
-    public async Task<IEnumerable<Item>> ItemsAsync(Guid id, string srch, CancellationToken ct = default)
+    public async Task<IEnumerable<Item>> ItemsAsync(AuthMe me, string srch, CancellationToken ct = default)
     {
         try
         {
             IEnumerable<OPEstado> ls = await _unit.Estados
-                .SearchAsync(e => e.AgenciaId == id && e.Activo == true, ct: ct);
+                .SearchAsync(e => e.AgenciaId == me.IdAgen && e.Activo == true, ct: ct);
             return ls.Select(e => e.ToItem());
         }
         catch (Exception)
