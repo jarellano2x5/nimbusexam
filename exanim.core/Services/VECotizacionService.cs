@@ -1,15 +1,13 @@
 using exanim.core.DTOs;
 using exanim.core.Entities;
-using exanim.core.Helpers;
 using exanim.core.Interfaces;
 using exanim.core.Storages;
 
 namespace exanim.core.Services;
 
-public class VECotizacionService(IUnitOfWork unitOfWork, IAuthHelper authHelper) : IVECotizacionService
+public class VECotizacionService(IUnitOfWork unitOfWork) : IVECotizacionService
 {
     private readonly IUnitOfWork _unit = unitOfWork;
-    private readonly IAuthHelper _auth = authHelper;
 
     public Task<VECotizacionDTO> AddAsync(VECotizacionDTO dto, CancellationToken ct = default)
     {
