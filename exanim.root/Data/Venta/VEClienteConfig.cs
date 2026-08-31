@@ -20,5 +20,9 @@ public class VEClienteConfig : IEntityTypeConfiguration<VECliente>
             .HasForeignKey(e => e.ClienteId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
+        builder.HasMany<VECotizacion>()
+            .WithOne()
+            .HasForeignKey(e => e.ClienteId)
+            .IsRequired(false);
     }
 }

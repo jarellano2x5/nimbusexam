@@ -35,7 +35,7 @@ public class Repository<T>(AppCtx context) : IRepository<T> where T : Entity
         _ctx.Set<T>().Add(model);
     }
 
-    public void AddsAsync(IEnumerable<T> models)
+    public void BulkAsync(IEnumerable<T> models)
     {
         _ctx.Set<T>().AddRange(models);
     }
@@ -50,11 +50,6 @@ public class Repository<T>(AppCtx context) : IRepository<T> where T : Entity
     public void UpdateAsync(T model)
     {
         _ctx.Set<T>().Update(model);
-    }
-
-    public void AttachAsync(IEnumerable<T> models)
-    {
-        _ctx.Set<T>().UpdateRange(models);
     }
 
     private DbSet<T> Mount(bool tracking, bool include)

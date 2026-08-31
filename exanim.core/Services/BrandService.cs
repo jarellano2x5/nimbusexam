@@ -35,12 +35,13 @@ public class BrandService(IUnitOfWork unitOfWork) : IBrandService
                 Guid[] r = lu.Select(b => b.Id!.Value).ToArray();
                 int c = await _unit.Brands.HasAsync(r, ct);
                 ArgumentOutOfRangeException.ThrowIfNotEqual(r.Length, c);
-                _unit.Brands.AttachAsync(lu.Select(b => b.ToPatch()));
+                foreach (BrandDTO b in lu)
+                    _unit.Brands.UpdateAsync(b.ToPatch());
             }
 
             if (li.Any())
             {
-                _unit.Brands.AddsAsync(li.Select(b => b.ToModel()));
+                _unit.Brands.BulkAsync(li.Select(b => b.ToModel()));
             }
 
             await _unit.CommitAsync(ct);

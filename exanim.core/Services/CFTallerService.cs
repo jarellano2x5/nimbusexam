@@ -20,11 +20,12 @@ public class CFTallerService(IUnitOfWork unitOfWork) : ICFTallerService
             Guid[] r = [.. lu.Select(t => t.Id!.Value)];
             int c = await _unit.Talleres.HasAsync(r, ct);
             ArgumentOutOfRangeException.ThrowIfNotEqual(r.Length, c);
-            _unit.Talleres.AttachAsync(lu.Select(t => t.ToPatch(id!.Value)));
+            foreach (var ta in lu)
+                _unit.Talleres.UpdateAsync(ta.ToPatch(id!.Value));
         }
         if (li.Any())
         {
-            _unit.Talleres.AddsAsync(li.Select(t => t.ToModel(id!.Value)));
+            _unit.Talleres.BulkAsync(li.Select(t => t.ToModel(id!.Value)));
         }
         await _unit.CommitAsync(ct);
         return t;

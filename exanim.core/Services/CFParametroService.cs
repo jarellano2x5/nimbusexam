@@ -22,11 +22,12 @@ public class CFParametroService(IUnitOfWork unitOfWork) : ICFParametroService
                 Guid[] r = [.. lu.Select(p => p.Id!.Value)];
                 int c = await _unit.Parametros.HasAsync(r, ct);
                 if (r.Length != c) throw new ArgumentException("Some record not exists");
-                _unit.Parametros.AttachAsync(lu.Select(p => p.ToPatch()));
+                foreach (var p in lu)
+                    _unit.Parametros.UpdateAsync(p.ToPatch());
             }
             if (li.Any())
             {
-                _unit.Parametros.AddsAsync(li.Select(p => p.ToModel()));
+                _unit.Parametros.BulkAsync(li.Select(p => p.ToModel()));
             }
             await _unit.CommitAsync(ct);
             return t;

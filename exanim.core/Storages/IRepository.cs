@@ -6,9 +6,8 @@ namespace exanim.core.Storages;
 public interface IRepository<T> where T : Entity
 {
     void InsertAsync(T model);
-    void AddsAsync(IEnumerable<T> models); 
+    void BulkAsync(IEnumerable<T> models); 
     void UpdateAsync(T model);
-    void AttachAsync(IEnumerable<T> models);
     void DeleteAsync(T model);
     Task<int> HasAsync(Guid[] ids, CancellationToken ct = default);
     Task<T?> GetAsync(Guid id, CancellationToken ct = default);

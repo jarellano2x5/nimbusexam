@@ -211,6 +211,10 @@ public class AppCtx : DbContext
                 .HasForeignKey(e => e.OrdenId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
+            entity.HasMany<VECotizacion>()
+                .WithOne()
+                .HasForeignKey(e => e.OrdenId)
+                .IsRequired(false);
         });
 
         modelBuilder.Entity<OPPaso>(entity =>
@@ -260,38 +264,6 @@ public class AppCtx : DbContext
             entity.Property(e => e.Comentario).HasMaxLength(120)
                 .IsUnicode(false).IsRequired();
             entity.Property(e => e.Fecha).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<VECotizacion>(entity =>
-        {
-            entity.HasKey(e => e.Id)
-                .HasName("PK_VECotizacion");
-            entity.ToTable("VECotizacion");
-
-            entity.Property(e => e.Fecha).HasColumnType("datetime");
-            entity.Property(e => e.Clave).HasMaxLength(20)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Vigencia).HasColumnType("datetime");
-
-            entity.HasMany<VELinea>()
-                .WithOne()
-                .HasForeignKey(e => e.CotizacionId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-        });
-
-        modelBuilder.Entity<VELinea>(entity =>
-        {
-            entity.HasKey(e => e.Id)
-                .HasName("PK_VELinea");
-            entity.ToTable("VELinea");
-
-            entity.Property(e => e.Clave).HasMaxLength(20)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Unidad).HasMaxLength(15)
-                .IsUnicode(false).IsRequired();
-            entity.Property(e => e.Concepto).HasMaxLength(500)
-                .IsUnicode(false).IsRequired();
         });
         
         base.OnModelCreating(modelBuilder);
