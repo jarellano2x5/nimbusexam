@@ -15,9 +15,9 @@ public class Repository<T>(AppCtx context) : IRepository<T> where T : Entity
         _ctx.Set<T>().Remove(model);
     }
 
-    public Task<int> HasAsync(Guid[] ids, CancellationToken ct = default)
+    public Task<int> HasAsync(Expression<Func<T, bool>> query, CancellationToken ct = default)
     {
-        return _ctx.Set<T>().Where(e => ids.Contains(e.Id)).CountAsync(ct);
+        return _ctx.Set<T>().Where(query).CountAsync(ct);
     }
 
     public async Task<T?> GetAsync(Guid id, CancellationToken ct = default)
@@ -44,6 +44,15 @@ public class Repository<T>(AppCtx context) : IRepository<T> where T : Entity
         bool tracking = false, bool addIncludes = false, CancellationToken cancellationToken = default)
     {
         return await Mount(tracking, addIncludes).Where(query)
+            .ToListAsync(cancellationToken);
+    }
+    
+    public async Task<IEnumerable<T>> StageAsync(Expression<Func<T, bool>> query,
+        int skip = 0, int take = 20, bool addIncludes = false,
+        CancellationToken cancellationToken = default)
+    {
+        return await Mount(false, addIncludes).Where(query)
+            .Skip(skip).Take(take)
             .ToListAsync(cancellationToken);
     }
 

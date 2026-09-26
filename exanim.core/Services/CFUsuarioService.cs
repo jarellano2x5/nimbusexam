@@ -36,7 +36,7 @@ public class CFUsuarioService(IUnitOfWork unitOfWork) : ICFUsuarioService
         try
         {
             IEnumerable<CFSocio> ls = await _unit.Socios
-                .SearchAsync(s => s.AgenciaId == idAgencia, false, true, ct);
+                .SearchAsync(s => s.AgenciaId == idAgencia, false, true, ct: ct);
             return ls.Select(s => s.ToDto());
         }
         catch (Exception e)

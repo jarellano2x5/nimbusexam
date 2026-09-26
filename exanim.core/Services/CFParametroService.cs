@@ -20,7 +20,7 @@ public class CFParametroService(IUnitOfWork unitOfWork) : ICFParametroService
             if (lu.Any())
             {
                 Guid[] r = [.. lu.Select(p => p.Id!.Value)];
-                int c = await _unit.Parametros.HasAsync(r, ct);
+                int c = await _unit.Parametros.HasAsync(c => r.Contains(c.Id), ct);
                 if (r.Length != c) throw new ArgumentException("Some record not exists");
                 foreach (var p in lu)
                     _unit.Parametros.UpdateAsync(p.ToPatch());
@@ -44,7 +44,7 @@ public class CFParametroService(IUnitOfWork unitOfWork) : ICFParametroService
         {
             int t = ids.Length;
             ArgumentOutOfRangeException.ThrowIfZero(t);
-            int c = await _unit.Parametros.HasAsync(ids, ct);
+            int c = await _unit.Parametros.HasAsync(c => ids.Contains(c.Id), ct);
             ArgumentOutOfRangeException.ThrowIfNotEqual(t, c);
             IEnumerable<CFParametro> ld = await _unit.Parametros
                 .SearchAsync(p => ids.Contains(p.Id), ct: ct);

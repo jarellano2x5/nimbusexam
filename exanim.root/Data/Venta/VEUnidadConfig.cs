@@ -26,5 +26,10 @@ public class VEUnidadConfig : IEntityTypeConfiguration<VEUnidad>
             .HasForeignKey(e => e.UnidadId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
+        builder.HasMany<VECotizacion>()
+            .WithOne(e => e.Unidad)
+            .HasForeignKey(e => e.UnidadId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

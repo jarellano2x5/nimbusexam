@@ -39,7 +39,7 @@ public class OPOrdenService(IUnitOfWork unitOfWork) : IOPOrdenService
             IEnumerable<OPOrden> li = await _unit.Ordenes
                 .SearchAsync(o => o.TallerId == idTaller
                 && (semana == 0 || ISOWeek.GetWeekOfYear(o.FechaEntrega == null ? o.Fecha : o.FechaEntrega!.Value.ToDateTime(new TimeOnly())) == semana)
-                && (o.Problema.Contains(criterio) || o.Unidad.Placa.Contains(criterio)), false, true, ct);
+                && (o.Problema.Contains(criterio) || o.Unidad.Placa.Contains(criterio)), false, true, ct: ct);
             return li.Select(o => o.ToMin());
         }
         catch (Exception)

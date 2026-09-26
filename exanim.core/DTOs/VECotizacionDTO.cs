@@ -10,7 +10,7 @@ public record VECotizacionDTO
     public string Clave { get; set; } = string.Empty;
     [MaxLength(50)]
     public string Vehiculo { get; set; } = string.Empty;
-    public double Monto { get; set; }
+    public float Monto { get; set; }
     [Required]
     public DateOnly Vigencia { get; set; }
     public bool Activo { get; set; }
@@ -19,5 +19,6 @@ public record VECotizacionDTO
     public Item? Cliente { get; set; }
     public Item? Orden { get; set; }
 
+    public VEUnidadDTO? Unidad { get; set; }
     public IEnumerable<VELineaDTO> Lineas { get; set; } = [];
 }

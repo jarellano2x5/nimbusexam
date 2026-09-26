@@ -18,7 +18,7 @@ public class OPClaseService(IUnitOfWork unitOfWork) : IOPClaseService
             if (lu.Any())
             {
                 Guid[] ids = [.. lu.Select(c => c.Id!.Value)];
-                int xi = await _unit.Clases.HasAsync(ids, ct);
+                int xi = await _unit.Clases.HasAsync(c => ids.Contains(c.Id), ct);
                 ArgumentOutOfRangeException.ThrowIfNotEqual(ids.Length, xi);
                 IEnumerable<OPClase> ls = await _unit.Clases
                     .SearchAsync(c => ids.Contains(c.Id), ct: ct);
@@ -49,7 +49,7 @@ public class OPClaseService(IUnitOfWork unitOfWork) : IOPClaseService
     {
         try
         {
-            int qn = await _unit.Clases.HasAsync(ids, ct);
+            int qn = await _unit.Clases.HasAsync(c => ids.Contains(c.Id), ct);
             ArgumentOutOfRangeException.ThrowIfNotEqual(ids.Length, qn);
             IEnumerable<OPClase> ld = await _unit.Clases
                 .SearchAsync(c => ids.Contains(c.Id), ct: ct);

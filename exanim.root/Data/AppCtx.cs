@@ -10,7 +10,7 @@ public class AppCtx : DbContext
         //base.Database.EnsureDeleted();
     }
 
-    public DbSet<Brand> Brands { get; set; }
+    public DbSet<OPBrand> Brands { get; set; }
     public DbSet<CFAgencia> Agencias { get; set; }
     public DbSet<CFConfigura> Configuraciones { get; set; }
     public DbSet<CFOperador> Operadores { get; set; }
@@ -37,22 +37,6 @@ public class AppCtx : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Brand>(entity =>
-        {
-            entity.HasKey(e => e.Id)
-                .HasName("PK_Brand");
-            entity.ToTable("Brand");
-
-            entity.Property(e => e.Name).HasMaxLength(30)
-                .IsUnicode(false).IsRequired();
-            
-            entity.HasMany<VEUnidad>()
-                .WithOne(e => e.Marca)
-                .HasForeignKey(e => e.MarcaId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
-        });
-
         modelBuilder.Entity<CFOperador>(entity =>
         {
             entity.HasKey(e => e.Id)

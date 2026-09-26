@@ -1,6 +1,6 @@
 namespace exanim.core.DTOs;
 
-public class DPage<T> where T : class
+public record DPage<T> where T : class
 {
     public int Count { get; set; }
     public int Pages { get; set; }

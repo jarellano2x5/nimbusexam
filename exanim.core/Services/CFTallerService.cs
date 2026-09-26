@@ -18,7 +18,7 @@ public class CFTallerService(IUnitOfWork unitOfWork) : ICFTallerService
         if (lu.Any())
         {
             Guid[] r = [.. lu.Select(t => t.Id!.Value)];
-            int c = await _unit.Talleres.HasAsync(r, ct);
+            int c = await _unit.Talleres.HasAsync(c => r.Contains(c.Id), ct);
             ArgumentOutOfRangeException.ThrowIfNotEqual(r.Length, c);
             foreach (var ta in lu)
                 _unit.Talleres.UpdateAsync(ta.ToPatch(me.IdAgen!.Value));
@@ -35,7 +35,7 @@ public class CFTallerService(IUnitOfWork unitOfWork) : ICFTallerService
     {
         try
         {
-            int c = await _unit.Talleres.HasAsync(ids, ct);
+            int c = await _unit.Talleres.HasAsync(t => ids.Contains(t.Id), ct);
             ArgumentOutOfRangeException.ThrowIfNotEqual(ids.Length, c);
             IEnumerable<CFTaller> lt = await _unit.Talleres
                 .SearchAsync(t => ids.Contains(t.Id), ct: ct);

@@ -4,7 +4,7 @@ namespace exanim.core.Storages;
 
 public interface IUnitOfWork : IDisposable
 {
-    IRepository<Brand> Brands { get; }
+    IRepository<OPBrand> Brands { get; }
     IRepository<CFAgencia> Agencias { get; }
     IRepository<CFConfigura> Configuras { get; }
     IRepository<CFOperador> Operadores { get; }

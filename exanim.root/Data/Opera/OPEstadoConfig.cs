@@ -12,10 +12,10 @@ public class OPEstadoConfig : IEntityTypeConfiguration<OPEstado>
             .HasName("PK_OPEstado");
         builder.ToTable("OPEstado");
 
-        builder.Property(e => e.Nombre).HasMaxLength(30)
-            .IsUnicode(false).IsRequired();
-        builder.Property(e => e.Code).HasMaxLength(15)
-            .IsUnicode(false).IsRequired();
+        builder.Property(e => e.Nombre)
+            .HasMaxLength(30).IsUnicode(false);
+        builder.Property(e => e.Code)
+            .HasMaxLength(8).IsUnicode(false);
 
         builder.HasMany<OPAvance>()
             .WithOne()

@@ -20,7 +20,7 @@ public class CFConfiguraService(IUnitOfWork unitOfWork) : ICFConfiguraService
             if (lu.Any())
             {
                 Guid[] r = lu.Select(c => c.Id!.Value).ToArray();
-                int e = await _unit.Configuras.HasAsync(r, ct);
+                int e = await _unit.Configuras.HasAsync(c => r.Contains(c.Id), ct);
                 ArgumentOutOfRangeException.ThrowIfNotEqual(r.Length, e);
                 IEnumerable<CFConfigura> ls = await _unit.Configuras
                     .SearchAsync(c => r.Contains(c.Id), ct: ct);
@@ -48,7 +48,7 @@ public class CFConfiguraService(IUnitOfWork unitOfWork) : ICFConfiguraService
         {
             int t = ids.Length;
             ArgumentOutOfRangeException.ThrowIfZero(t);
-            int c = await _unit.Configuras.HasAsync(ids, ct);
+            int c = await _unit.Configuras.HasAsync(c => ids.Contains(c.Id), ct);
             ArgumentOutOfRangeException.ThrowIfNotEqual(t, c);
             IEnumerable<CFConfigura> lc = await _unit.Configuras
                 .SearchAsync(c => ids.Contains(c.Id), ct: ct);

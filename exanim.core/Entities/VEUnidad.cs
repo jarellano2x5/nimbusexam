@@ -12,7 +12,7 @@ public class VEUnidad : Entity
     public Guid MarcaId { get; set; }
     public bool Activo { get; set; }
 
-    public virtual Brand Marca { get; set; } = null!;
+    public virtual OPBrand Marca { get; set; } = null!;
 }
 
 public static class UnidadExtensions

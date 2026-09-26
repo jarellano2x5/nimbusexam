@@ -1,5 +1,6 @@
 using exanim.core.DTOs;
 using exanim.core.Entities;
+using exanim.core.Enums;
 using exanim.core.Interfaces;
 using exanim.core.Storages;
 
@@ -18,7 +19,7 @@ public class OPEstadoService(IUnitOfWork unitOfWork) : IOPEstadoService
             if (lu.Any())
             {
                 Guid[] r = [.. lu.Select(e => e.Id!.Value)];
-                int ee = await _unit.Estados.HasAsync(r, ct);
+                int ee = await _unit.Estados.HasAsync(e => r.Contains(e.Id), ct);
                 ArgumentOutOfRangeException.ThrowIfNotEqual(r.Length, ee);
                 IEnumerable<OPEstado> ls = await _unit.Estados
                     .SearchAsync(e => r.Contains(e.Id), ct: ct);
@@ -45,7 +46,7 @@ public class OPEstadoService(IUnitOfWork unitOfWork) : IOPEstadoService
     {
         try
         {
-            int c = await _unit.Estados.HasAsync(ids, ct);
+            int c = await _unit.Estados.HasAsync(e => ids.Contains(e.Id), ct);
             ArgumentOutOfRangeException.ThrowIfNotEqual(ids.Length, c);
             IEnumerable<OPEstado> le = await _unit.Estados
                 .SearchAsync(e => ids.Contains(e.Id), ct: ct);
@@ -73,6 +74,57 @@ public class OPEstadoService(IUnitOfWork unitOfWork) : IOPEstadoService
         }
         catch (Exception)
         {
+            throw;
+        }
+    }
+
+    public async Task<bool> Configure(AuthMe me, CancellationToken ct = default)
+    {
+        try
+        {
+            int qn = await _unit.Estados.HasAsync(e => e.AgenciaId == me.IdAgen!.Value, ct);
+            if (qn > 0) return false;
+            IEnumerable<OPEstado> li =
+            [
+                new()
+                {
+                    Id = Guid.NewGuid(), Nombre = "Generada",
+                    Fase = OPFaseEnum.Inicio, Code = "GEN01",
+                    AgenciaId = me.IdAgen!.Value
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(), Nombre = "En proceso",
+                    Fase = OPFaseEnum.Trabajando, Code = "EPR01",
+                    AgenciaId = me.IdAgen!.Value
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(), Nombre = "Por aprobar",
+                    Fase = OPFaseEnum.Pausa, Code = "PAU01",
+                    AgenciaId = me.IdAgen!.Value
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(), Nombre = "Terminado",
+                    Fase = OPFaseEnum.Completo, Code = "TER01",
+                    AgenciaId = me.IdAgen!.Value
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(), Nombre = "Cancelado",
+                    Fase = OPFaseEnum.Cese, Code = "CAN01",
+                    AgenciaId = me.IdAgen!.Value
+                }
+            ];
+            foreach (OPEstado e in li)
+                _unit.Estados.InsertAsync(e);
+            await _unit.CommitAsync(ct);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
             throw;
         }
     }

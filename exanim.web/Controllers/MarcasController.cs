@@ -8,9 +8,9 @@ namespace exanim.web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class MarcasController(IBrandService service) : ControllerBase
+public class MarcasController(IOPBrandService service) : ControllerBase
 {
-    private readonly IBrandService _logic = service;
+    private readonly IOPBrandService _logic = service;
 
     [HttpGet]
     public async Task<IEnumerable<Item>> Get(CancellationToken kt, string criterio = "")

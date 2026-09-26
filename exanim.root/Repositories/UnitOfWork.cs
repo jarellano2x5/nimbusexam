@@ -8,7 +8,7 @@ public class UnitOfWork(AppCtx context) : IUnitOfWork
 {
     private readonly AppCtx _ctx = context;
     
-    private IRepository<Brand>? _brands;
+    private IRepository<OPBrand>? _brands;
     private IRepository<CFAgencia>? _agencias;
     private IRepository<CFConfigura>? _configuras;
     private IRepository<CFOperador>? _operadores;
@@ -34,7 +34,7 @@ public class UnitOfWork(AppCtx context) : IUnitOfWork
     private IRepository<VELinea>? _lineas;
     private IRepository<VEUnidad>? _unidades;
     
-    public IRepository<Brand> Brands  => _brands ??= new Repository<Brand>(_ctx);
+    public IRepository<OPBrand> Brands  => _brands ??= new Repository<OPBrand>(_ctx);
     public IRepository<CFAgencia> Agencias => _agencias ??= new Repository<CFAgencia>(_ctx);
     public IRepository<CFConfigura> Configuras => _configuras ??= new Repository<CFConfigura>(_ctx);
     public IRepository<CFOperador> Operadores => _operadores ??= new Repository<CFOperador>(_ctx);
